@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const fetchEvent = require("./queries/fetchEvent");
 const app = express();
 const PORT = process.env.PORT || 5001;
 
@@ -10,9 +11,21 @@ app.use(cors());
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "../client/build")));
 
+// REST endpoint to get event data
+app.get("/api/event", async (req, res) => {
+  const { slug } = req.query;
+  try {
+    const event = await fetchEvent(slug);
+    res.json(event);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch event" });
+  }
+});
+
 // An example API endpoint
 app.get("/api/hello", (req, res) => {
-  res.send({ message: "Hello from the serverr!" });
+  res.send({ message: "Hello from the server!" });
 });
 
 // The "catchall" handler: for any request that doesn't
