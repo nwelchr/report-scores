@@ -8,16 +8,27 @@ const fetchEvent = async (slug) => {
   return data;
 };
 
+const extractSlug = (input) => {
+  const regex = /(tournament\/[^\/]+\/events?\/[^\/\s]+)/;
+  const match = input.match(regex);
+  if (match) {
+    const normalizedSlug = match[0].replace("/events/", "/event/");
+    return normalizedSlug;
+  }
+  return "";
+};
+
 function App() {
-  const [slug, setSlug] = useState("");
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["event", { slug }],
-    queryFn: () => fetchEvent(slug),
-    enabled: !!slug,
+  const [url, setUrl] = useState("");
+  const { data, error, isLoading, refetch } = useQuery({
+    queryKey: ["event", { slug: extractSlug(url) }],
+    queryFn: () => fetchEvent(extractSlug(url)),
+    enabled: !!extractSlug(url),
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    refetch();
   };
 
   return (
@@ -26,8 +37,8 @@ function App() {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          value={slug}
-          onChange={(e) => setSlug(e.target.value)}
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
           placeholder="Enter event slug"
         />
         <button type="submit">Fetch Event</button>
