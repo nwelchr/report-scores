@@ -20,21 +20,16 @@ const extractSlug = (input) => {
 
 function App() {
   const [url, setUrl] = useState("");
-  const { data, error, isLoading, refetch } = useQuery({
+  const { data, error, isLoading } = useQuery({
     queryKey: ["event", { slug: extractSlug(url) }],
     queryFn: () => fetchEvent(extractSlug(url)),
     enabled: !!extractSlug(url),
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    refetch();
-  };
-
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
       <h1 className="text-4xl mb-8">Fetch Event Data</h1>
-      <form onSubmit={handleSubmit} className="mb-8">
+      <form className="mb-8">
         <input
           type="text"
           value={url}
@@ -52,7 +47,7 @@ function App() {
           <h3 className="text-xl mb-2">Standings</h3>
           <ul>
             {data.standings.map((standing) => (
-              <Entrant standing={standing} />
+              <Entrant key={standing.entrant.id} standing={standing} />
             ))}
           </ul>
         </div>

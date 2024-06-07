@@ -13,7 +13,6 @@ const getColorByPlacement = (placement) => {
 const Entrant = ({ standing }) => {
   return (
     <li
-      key={standing.entrant.id}
       className={`p-2 mb-2 rounded-md ${getColorByPlacement(
         standing.placement
       )}`}
