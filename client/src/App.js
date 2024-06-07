@@ -17,7 +17,7 @@ function App() {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="App">
+    <div className="bg-red-50">
       <h1>{data.message}</h1>
     </div>
   );
