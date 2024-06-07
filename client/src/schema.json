@@ -1,0 +1,882 @@
+{
+  "types": {
+    "Query": {
+      "fields": {
+        "currentUser": "User",
+        "entrant": "Entrant",
+        "event": "Event",
+        "league": "League",
+        "leagues": "LeagueConnection",
+        "participant": "Participant",
+        "phase": "Phase",
+        "phaseGroup": "PhaseGroup",
+        "player": "Player",
+        "seed": "Seed",
+        "set": "Set",
+        "shop": "Shop",
+        "stream": "Streams",
+        "streamQueue": "StreamQueue",
+        "team": "Team",
+        "tournament": "Tournament",
+        "tournaments": "TournamentConnection",
+        "user": "User",
+        "videogame": "Videogame",
+        "videogames": "VideogameConnection"
+      }
+    },
+    "User": {
+      "fields": {
+        "authorizations": "ProfileAuthorization",
+        "id": "ID",
+        "bio": "String",
+        "birthday": "String",
+        "discriminator": "String",
+        "email": "String",
+        "events": "EventConnection",
+        "genderPronoun": "String",
+        "images": "Image",
+        "leagues": "LeagueConnection",
+        "location": "Address",
+        "name": "String",
+        "player": "Player",
+        "slug": "String",
+        "tournaments": "TournamentConnection"
+      }
+    },
+    "ProfileAuthorization": {
+      "fields": {
+        "id": "ID",
+        "externalId": "String",
+        "externalUsername": "String",
+        "stream": "Stream",
+        "type": "AuthorizationType",
+        "url": "String"
+      }
+    },
+    "Stream": {
+      "fields": {
+        "id": "ID",
+        "isOnline": "Boolean",
+        "name": "String",
+        "type": "StreamType"
+      }
+    },
+    "EventConnection": {
+      "fields": {
+        "pageInfo": "PageInfo",
+        "nodes": "Event"
+      }
+    },
+    "PageInfo": {
+      "fields": {
+        "total": "Int",
+        "totalPages": "Int",
+        "page": "Int",
+        "perPage": "Int",
+        "sortBy": "String",
+        "filter": "JSON"
+      }
+    },
+    "Event": {
+      "fields": {
+        "id": "ID",
+        "checkInBuffer": "Int",
+        "checkInDuration": "Int",
+        "checkInEnabled": "Boolean",
+        "competitionTier": "Int",
+        "createdAt": "Timestamp",
+        "deckSubmissionDeadline": "Timestamp",
+        "entrantSizeMax": "Int",
+        "entrantSizeMin": "Int",
+        "entrants": "EntrantConnection",
+        "hasDecks": "Boolean",
+        "hasTasks": "Boolean",
+        "images": "Image",
+        "isOnline": "Boolean",
+        "league": "League",
+        "matchRulesMarkdown": "String",
+        "name": "String",
+        "numEntrants": "Int",
+        "phaseGroups": "PhaseGroup",
+        "phases": "Phase",
+        "prizingInfo": "JSON",
+        "publishing": "JSON",
+        "rulesMarkdown": "String",
+        "rulesetId": "Int",
+        "rulesetSettings": "JSON",
+        "sets": "SetConnection",
+        "slug": "String",
+        "standings": "StandingConnection",
+        "startAt": "Timestamp",
+        "state": "ActivityState",
+        "stations": "StationsConnection",
+        "teamManagementDeadline": "Timestamp",
+        "teamNameAllowed": "Boolean",
+        "teamRosterSize": "TeamRosterSize",
+        "tournament": "Tournament",
+        "type": "Int",
+        "updatedAt": "Timestamp",
+        "useEventSeeds": "Boolean",
+        "userEntrant": "Entrant",
+        "videogame": "Videogame",
+        "waves": "Wave"
+      }
+    },
+    "EntrantConnection": {
+      "fields": {
+        "pageInfo": "PageInfo",
+        "nodes": "Entrant"
+      }
+    },
+    "Entrant": {
+      "fields": {
+        "id": "ID",
+        "event": "Event",
+        "initialSeedNum": "Int",
+        "isDisqualified": "Boolean",
+        "name": "String",
+        "paginatedSets": "SetConnection",
+        "participants": "Participant",
+        "seeds": "Seed",
+        "skill": "Int",
+        "standing": "Standing",
+        "stream": "Streams",
+        "streams": "Streams",
+        "team": "Team"
+      }
+    },
+    "SetConnection": {
+      "fields": {
+        "pageInfo": "PageInfo",
+        "nodes": "Set"
+      }
+    },
+    "Set": {
+      "fields": {
+        "id": "ID",
+        "completedAt": "Timestamp",
+        "createdAt": "Timestamp",
+        "displayScore": "String",
+        "event": "Event",
+        "fullRoundText": "String",
+        "game": "Game",
+        "games": "Game",
+        "hasPlaceholder": "Boolean",
+        "identifier": "String",
+        "images": "Image",
+        "lPlacement": "Int",
+        "phaseGroup": "PhaseGroup",
+        "resetAffectedData": "ResetAffectedData",
+        "round": "Int",
+        "setGamesType": "Int",
+        "slots": "SetSlot",
+        "startAt": "Timestamp",
+        "startedAt": "Timestamp",
+        "state": "Int",
+        "station": "Stations",
+        "stream": "Streams",
+        "totalGames": "Int",
+        "vodUrl": "String",
+        "wPlacement": "Int",
+        "winnerId": "Int"
+      }
+    },
+    "Game": {
+      "fields": {
+        "id": "ID",
+        "entrant1Score": "Int",
+        "entrant2Score": "Int",
+        "images": "Image",
+        "orderNum": "Int",
+        "selections": "GameSelection",
+        "stage": "Stage",
+        "state": "Int",
+        "winnerId": "Int"
+      }
+    },
+    "Image": {
+      "fields": {
+        "id": "ID",
+        "height": "Float",
+        "ratio": "Float",
+        "type": "String",
+        "url": "String",
+        "width": "Float"
+      }
+    },
+    "GameSelection": {
+      "fields": {
+        "character": "Character",
+        "id": "ID",
+        "entrant": "Entrant",
+        "orderNum": "Int",
+        "participant": "Participant",
+        "selectionType": "GameSelectionType",
+        "selectionValue": "Int"
+      }
+    },
+    "Character": {
+      "fields": {
+        "id": "ID",
+        "images": "Image",
+        "name": "String"
+      }
+    },
+    "Participant": {
+      "fields": {
+        "id": "ID",
+        "checkedIn": "Boolean",
+        "checkedInAt": "Timestamp",
+        "connectedAccounts": "JSON",
+        "contactInfo": "ContactInfo",
+        "email": "String",
+        "entrants": "Entrant",
+        "events": "Event",
+        "gamerTag": "String",
+        "images": "Image",
+        "player": "Player",
+        "prefix": "String",
+        "requiredConnections": "ProfileAuthorization",
+        "user": "User",
+        "verified": "Boolean"
+      }
+    },
+    "ContactInfo": {
+      "fields": {
+        "id": "ID",
+        "city": "String",
+        "country": "String",
+        "countryId": "Int",
+        "name": "String",
+        "nameFirst": "String",
+        "nameLast": "String",
+        "state": "String",
+        "stateId": "Int",
+        "zipcode": "String"
+      }
+    },
+    "Player": {
+      "fields": {
+        "id": "ID",
+        "gamerTag": "String",
+        "prefix": "String",
+        "rankings": "PlayerRank",
+        "recentSets": "Set",
+        "recentStandings": "Standing",
+        "sets": "SetConnection",
+        "user": "User"
+      }
+    },
+    "PlayerRank": {
+      "fields": {
+        "id": "ID",
+        "rank": "Int",
+        "title": "String"
+      }
+    },
+    "Standing": {
+      "fields": {
+        "id": "ID",
+        "container": "StandingContainer",
+        "entrant": "Entrant",
+        "isFinal": "Boolean",
+        "metadata": "JSON",
+        "placement": "Int",
+        "player": "Player",
+        "standing": "Int",
+        "stats": "StandingStats",
+        "totalPoints": "Float"
+      }
+    },
+    "Tournament": {
+      "fields": {
+        "id": "ID",
+        "addrState": "String",
+        "admins": "User",
+        "city": "String",
+        "countryCode": "String",
+        "createdAt": "Timestamp",
+        "currency": "String",
+        "endAt": "Timestamp",
+        "eventRegistrationClosesAt": "Timestamp",
+        "events": "Event",
+        "hasOfflineEvents": "Boolean",
+        "hasOnlineEvents": "Boolean",
+        "hashtag": "String",
+        "images": "Image",
+        "isOnline": "Boolean",
+        "isRegistrationOpen": "Boolean",
+        "lat": "Float",
+        "links": "TournamentLinks",
+        "lng": "Float",
+        "mapsPlaceId": "String",
+        "name": "String",
+        "numAttendees": "Int",
+        "owner": "User",
+        "participants": "ParticipantConnection",
+        "postalCode": "String",
+        "primaryContact": "String",
+        "primaryContactType": "String",
+        "publishing": "JSON",
+        "registrationClosesAt": "Timestamp",
+        "rules": "String",
+        "shortSlug": "String",
+        "slug": "String",
+        "startAt": "Timestamp",
+        "state": "Int",
+        "stations": "StationsConnection",
+        "streamQueue": "StreamQueue",
+        "streams": "Streams",
+        "teamCreationClosesAt": "Timestamp",
+        "teams": "TeamConnection",
+        "timezone": "String",
+        "tournamentType": "Int",
+        "updatedAt": "Timestamp",
+        "url": "String",
+        "venueAddress": "String",
+        "venueName": "String",
+        "waves": "Wave"
+      }
+    },
+    "TournamentLinks": {
+      "fields": {
+        "facebook": "String",
+        "discord": "String"
+      }
+    },
+    "ParticipantConnection": {
+      "fields": {
+        "pageInfo": "PageInfo",
+        "nodes": "Participant"
+      }
+    },
+    "StationsConnection": {
+      "fields": {
+        "pageInfo": "PageInfo",
+        "nodes": "Stations"
+      }
+    },
+    "Stations": {
+      "fields": {
+        "id": "ID",
+        "canAutoAssign": "Boolean",
+        "clusterNumber": "String",
+        "clusterPrefix": "Int",
+        "enabled": "Boolean",
+        "identifier": "Int",
+        "numSetups": "Int",
+        "number": "Int",
+        "prefix": "String",
+        "queue": "JSON",
+        "queueDepth": "Int",
+        "state": "Int",
+        "updatedAt": "Timestamp"
+      }
+    },
+    "StreamQueue": {
+      "fields": {
+        "id": "String",
+        "sets": "Set",
+        "stream": "Streams"
+      }
+    },
+    "Streams": {
+      "fields": {
+        "id": "ID",
+        "enabled": "Boolean",
+        "followerCount": "Int",
+        "isOnline": "Boolean",
+        "numSetups": "Int",
+        "parentStreamId": "Int",
+        "streamGame": "String",
+        "streamId": "String",
+        "streamLogo": "String",
+        "streamName": "String",
+        "streamSource": "StreamSource",
+        "streamStatus": "String",
+        "streamType": "Int",
+        "streamTypeId": "Int"
+      }
+    },
+    "TeamConnection": {
+      "fields": {
+        "pageInfo": "PageInfo",
+        "nodes": "Team"
+      }
+    },
+    "Team": {
+      "fields": {
+        "id": "ID",
+        "discriminator": "String",
+        "entrant": "Entrant",
+        "event": "Event",
+        "images": "Image",
+        "members": "TeamMember",
+        "name": "String"
+      }
+    },
+    "TeamMember": {
+      "fields": {
+        "id": "ID",
+        "isAlternate": "Boolean",
+        "isCaptain": "Boolean",
+        "memberType": "TeamMemberType",
+        "participant": "Participant",
+        "player": "Player",
+        "status": "TeamMemberStatus"
+      }
+    },
+    "Wave": {
+      "fields": {
+        "id": "ID",
+        "identifier": "String",
+        "startAt": "Timestamp"
+      }
+    },
+    "PhaseGroup": {
+      "fields": {
+        "id": "ID",
+        "bracketType": "BracketType",
+        "bracketUrl": "String",
+        "displayIdentifier": "String",
+        "firstRoundTime": "Timestamp",
+        "numRounds": "Int",
+        "paginatedSeeds": "SeedConnection",
+        "paginatedSets": "SetConnection",
+        "phase": "Phase",
+        "progressionsOut": "Progression",
+        "rounds": "Round",
+        "seedMap": "JSON",
+        "seeds": "SeedConnection",
+        "sets": "SetConnection",
+        "standings": "StandingConnection",
+        "startAt": "Timestamp",
+        "state": "Int",
+        "tiebreakOrder": "JSON",
+        "wave": "Wave"
+      }
+    },
+    "SeedConnection": {
+      "fields": {
+        "pageInfo": "PageInfo",
+        "nodes": "Seed"
+      }
+    },
+    "Seed": {
+      "fields": {
+        "id": "ID",
+        "checkedInParticipants": "JSON",
+        "entrant": "Entrant",
+        "groupSeedNum": "Int",
+        "isBye": "Boolean",
+        "phase": "Phase",
+        "phaseGroup": "PhaseGroup",
+        "placeholderName": "String",
+        "placement": "Int",
+        "players": "Player",
+        "progressionSeedId": "Int",
+        "progressionSource": "Progression",
+        "seedNum": "Int",
+        "setRecordWithoutByes": "JSON",
+        "standings": "Standing"
+      }
+    },
+    "Phase": {
+      "fields": {
+        "id": "ID",
+        "bracketType": "BracketType",
+        "event": "Event",
+        "groupCount": "Int",
+        "isExhibition": "Boolean",
+        "name": "String",
+        "numSeeds": "Int",
+        "paginatedSeeds": "SeedConnection",
+        "phaseGroups": "PhaseGroupConnection",
+        "phaseOrder": "Int",
+        "seeds": "SeedConnection",
+        "sets": "SetConnection",
+        "state": "ActivityState",
+        "waves": "Wave"
+      }
+    },
+    "PhaseGroupConnection": {
+      "fields": {
+        "pageInfo": "PageInfo",
+        "nodes": "PhaseGroup"
+      }
+    },
+    "Progression": {
+      "fields": {
+        "id": "ID",
+        "originOrder": "Int",
+        "originPhase": "Phase",
+        "originPhaseGroup": "PhaseGroup",
+        "originPlacement": "Int"
+      }
+    },
+    "Round": {
+      "fields": {
+        "id": "ID",
+        "bestOf": "Int",
+        "number": "Int",
+        "startAt": "Timestamp"
+      }
+    },
+    "StandingConnection": {
+      "fields": {
+        "pageInfo": "PageInfo",
+        "nodes": "Standing"
+      }
+    },
+    "StandingStats": {
+      "fields": {
+        "score": "Score"
+      }
+    },
+    "Score": {
+      "fields": {
+        "label": "String",
+        "value": "Float",
+        "displayValue": "String"
+      }
+    },
+    "Stage": {
+      "fields": {
+        "id": "ID",
+        "name": "String"
+      }
+    },
+    "ResetAffectedData": {
+      "fields": {
+        "affectedSetCount": "Int",
+        "affectedSets": "Set",
+        "affectedPhaseGroupCount": "Int"
+      }
+    },
+    "SetSlot": {
+      "fields": {
+        "id": "ID",
+        "entrant": "Entrant",
+        "prereqId": "String",
+        "prereqPlacement": "Int",
+        "prereqType": "String",
+        "seed": "Seed",
+        "slotIndex": "Int",
+        "standing": "Standing"
+      }
+    },
+    "League": {
+      "fields": {
+        "id": "ID",
+        "addrState": "String",
+        "city": "String",
+        "countryCode": "String",
+        "createdAt": "Timestamp",
+        "currency": "String",
+        "endAt": "Timestamp",
+        "entrantCount": "Int",
+        "eventOwners": "EventOwnerConnection",
+        "eventRegistrationClosesAt": "Timestamp",
+        "events": "EventConnection",
+        "finalEventId": "Int",
+        "hasOfflineEvents": "Boolean",
+        "hasOnlineEvents": "Boolean",
+        "hashtag": "String",
+        "images": "Image",
+        "isOnline": "Boolean",
+        "lat": "Float",
+        "links": "TournamentLinks",
+        "lng": "Float",
+        "mapsPlaceId": "String",
+        "name": "String",
+        "numProgressingToFinalEvent": "Int",
+        "numUniquePlayers": "Int",
+        "postalCode": "String",
+        "primaryContact": "String",
+        "primaryContactType": "String",
+        "publishing": "JSON",
+        "registrationClosesAt": "Timestamp",
+        "rules": "String",
+        "shortSlug": "String",
+        "showStandings": "Boolean",
+        "slug": "String",
+        "standings": "StandingConnection",
+        "startAt": "Timestamp",
+        "state": "Int",
+        "teamCreationClosesAt": "Timestamp",
+        "tiers": "EventTier",
+        "timezone": "String",
+        "tournamentType": "Int",
+        "updatedAt": "Timestamp",
+        "url": "String",
+        "venueAddress": "String",
+        "venueName": "String",
+        "videogames": "Videogame"
+      }
+    },
+    "EventOwnerConnection": {
+      "fields": {
+        "pageInfo": "PageInfo",
+        "nodes": "EventOwner"
+      }
+    },
+    "EventOwner": {
+      "fields": {
+        "eventId": "ID",
+        "email": "String",
+        "gamerTag": "String",
+        "fullName": "String"
+      }
+    },
+    "EventTier": {
+      "fields": {
+        "id": "ID",
+        "name": "String"
+      }
+    },
+    "Videogame": {
+      "fields": {
+        "id": "ID",
+        "characters": "Character",
+        "displayName": "String",
+        "images": "Image",
+        "name": "String",
+        "slug": "String",
+        "stages": "Stage"
+      }
+    },
+    "TeamRosterSize": {
+      "fields": {
+        "maxAlternates": "Int",
+        "maxPlayers": "Int",
+        "minAlternates": "Int",
+        "minPlayers": "Int"
+      }
+    },
+    "LeagueConnection": {
+      "fields": {
+        "pageInfo": "PageInfo",
+        "nodes": "League"
+      }
+    },
+    "Address": {
+      "fields": {
+        "id": "ID",
+        "city": "String",
+        "country": "String",
+        "countryId": "Int",
+        "state": "String",
+        "stateId": "Int"
+      }
+    },
+    "TournamentConnection": {
+      "fields": {
+        "pageInfo": "PageInfo",
+        "nodes": "Tournament"
+      }
+    },
+    "Shop": {
+      "fields": {
+        "id": "ID",
+        "levels": "ShopLevelConnection",
+        "messages": "ShopOrderMessageConnection",
+        "name": "String",
+        "slug": "String",
+        "url": "String"
+      }
+    },
+    "ShopLevelConnection": {
+      "fields": {
+        "pageInfo": "PageInfo",
+        "nodes": "ShopLevel"
+      }
+    },
+    "ShopLevel": {
+      "fields": {
+        "id": "ID",
+        "currAmount": "Float",
+        "description": "String",
+        "goalAmount": "Float",
+        "images": "Image",
+        "name": "String"
+      }
+    },
+    "ShopOrderMessageConnection": {
+      "fields": {
+        "pageInfo": "PageInfo",
+        "nodes": "ShopOrderMessage"
+      }
+    },
+    "ShopOrderMessage": {
+      "fields": {
+        "id": "ID",
+        "gamertag": "String",
+        "message": "String",
+        "name": "String",
+        "player": "Player",
+        "total": "Float"
+      }
+    },
+    "VideogameConnection": {
+      "fields": {
+        "pageInfo": "PageInfo",
+        "nodes": "Videogame"
+      }
+    },
+    "Mutation": {
+      "fields": {
+        "deletePhase": "Boolean",
+        "deleteStation": "Boolean",
+        "deleteWave": "Boolean",
+        "generateRegistrationToken": "String",
+        "markSetCalled": "Set",
+        "markSetInProgress": "Set",
+        "registerForTournament": "Participant",
+        "reportBracketSet": "Set",
+        "resetSet": "Set",
+        "resolveScheduleConflicts": "Seed",
+        "swapSeeds": "Seed",
+        "updateBracketSet": "Set",
+        "updatePhaseGroups": "PhaseGroup",
+        "updatePhaseSeeding": "Phase",
+        "upsertPhase": "Phase",
+        "upsertStation": "Stations",
+        "upsertWave": "Wave"
+      }
+    },
+    "__Schema": {
+      "fields": {
+        "types": null,
+        "queryType": "__Type",
+        "mutationType": "__Type",
+        "subscriptionType": "__Type",
+        "directives": null
+      }
+    },
+    "__Type": {
+      "fields": {
+        "kind": "__TypeKind",
+        "name": "String",
+        "description": "String",
+        "fields": null,
+        "interfaces": null,
+        "possibleTypes": null,
+        "enumValues": null,
+        "inputFields": null,
+        "ofType": "__Type"
+      }
+    },
+    "__Field": {
+      "fields": {
+        "name": "String",
+        "description": "String",
+        "args": null,
+        "type": "__Type",
+        "isDeprecated": "Boolean",
+        "deprecationReason": "String"
+      }
+    },
+    "__InputValue": {
+      "fields": {
+        "name": "String",
+        "description": "String",
+        "type": "__Type",
+        "defaultValue": "String"
+      }
+    },
+    "__EnumValue": {
+      "fields": {
+        "name": "String",
+        "description": "String",
+        "isDeprecated": "Boolean",
+        "deprecationReason": "String"
+      }
+    },
+    "__Directive": {
+      "fields": {
+        "name": "String",
+        "description": "String",
+        "locations": null,
+        "args": null,
+        "onOperation": "Boolean",
+        "onFragment": "Boolean",
+        "onField": "Boolean"
+      }
+    },
+    "ActionSet": {
+      "fields": {
+        "id": "ID"
+      }
+    },
+    "BracketConfig": {
+      "fields": {
+        "id": "ID",
+        "bracketType": "BracketType"
+      }
+    },
+    "EventTeam": {
+      "fields": {
+        "id": "ID",
+        "discriminator": "String",
+        "entrant": "Entrant",
+        "event": "Event",
+        "globalTeam": "GlobalTeam",
+        "images": "Image",
+        "members": "TeamMember",
+        "name": "String"
+      }
+    },
+    "GlobalTeam": {
+      "fields": {
+        "id": "ID",
+        "discriminator": "String",
+        "entrant": "Entrant",
+        "event": "Event",
+        "eventTeams": "EventTeamConnection",
+        "images": "Image",
+        "leagueTeams": "EventTeamConnection",
+        "members": "TeamMember",
+        "name": "String"
+      }
+    },
+    "EventTeamConnection": {
+      "fields": {
+        "pageInfo": "PageInfo",
+        "nodes": "EventTeam"
+      }
+    },
+    "MatchConfig": {
+      "fields": {
+        "id": "ID",
+        "bracketType": "BracketType"
+      }
+    },
+    "RaceBracketConfig": {
+      "fields": {
+        "automaticEndTime": "Timestamp",
+        "id": "ID",
+        "automaticStartTime": "Timestamp",
+        "bracketType": "BracketType",
+        "goalTargetComparator": "Comparator",
+        "goalTargetValue": "String",
+        "limitMode": "RaceLimitMode",
+        "limitValue": "Int",
+        "raceType": "RaceType"
+      }
+    },
+    "RaceMatchConfig": {
+      "fields": {
+        "id": "ID",
+        "bracketType": "BracketType",
+        "playerReportingEnabled": "Boolean",
+        "verificationMethods": "MatchConfigVerificationMethod",
+        "verificationRequired": "Boolean"
+      }
+    },
+    "TeamActionSet": {
+      "fields": {
+        "id": "ID"
+      }
+    }
+  }
+}

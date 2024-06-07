@@ -17,6 +17,11 @@ const fetchEventStandings = async (eventId, page = 1, perPage = 50) => {
                 seeds {
                     seedNum
                 }
+                participants {
+                  player {
+                    id
+                  }
+                }
               }
             }
           }
