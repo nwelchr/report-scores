@@ -1,22 +1,24 @@
-import logo from "./logo.svg";
-import "./App.css";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+const fetchHello = async () => {
+  const { data } = await axios.get("/api/hello");
+  return data;
+};
 
 function App() {
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["hello"],
+    queryFn: fetchHello,
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>{data.message}</h1>
     </div>
   );
 }
