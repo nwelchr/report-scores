@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const fetchEvent = require("./queries/fetchEvent");
+const fetchEventStandings = require("./queries/fetchEventStandings");
 const app = express();
 const PORT = process.env.PORT || 5001;
 
@@ -16,10 +17,11 @@ app.get("/api/event", async (req, res) => {
   const { slug } = req.query;
   try {
     const event = await fetchEvent(slug);
-    res.json(event);
+    const standings = await fetchEventStandings(event.id);
+    res.json({ event, standings });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to fetch event" });
+    res.status(500).json({ error: "Failed to fetch event data" });
   }
 });
 
