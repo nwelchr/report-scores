@@ -1,4 +1,3 @@
-// server/fetchEvent.js
 const axios = require("axios");
 const { headers } = require("./constants");
 
