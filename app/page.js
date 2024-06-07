@@ -1,9 +1,10 @@
+// app/page.js
 "use client";
 
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import Entrant from "../components/Entrant";
+import Entrant from "./components/Entrant";
 
 const fetchEvent = async (slug) => {
   const { data } = await axios.get(`/api/event`, { params: { slug } });
