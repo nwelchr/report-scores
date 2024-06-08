@@ -3,7 +3,16 @@
 import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
+const getOptions = (eventId, entrantId) => ({
+  queryKey: [
+    "entrantSets",
+    { eventId: String(eventId), entrantId: String(entrantId) },
+  ],
+  queryFn: () => fetchEntrantSets(eventId, entrantId),
+  enabled: !!eventId && !!entrantId,
+});
 
 const fetchEntrantSets = async (eventId, entrantId) => {
   const { data } = await axios.get(
@@ -15,15 +24,22 @@ const fetchEntrantSets = async (eventId, entrantId) => {
 export default function EntrantSetsPage() {
   const { eventId, entrantId } = useParams();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["entrantSets", { eventId, entrantId }],
-    queryFn: () => fetchEntrantSets(eventId, entrantId),
-    enabled: !!eventId && !!entrantId,
-  });
+  const { data, error, isLoading } = useQuery(getOptions(eventId, entrantId));
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (isLoading)
+    return (
+      <div className="min-h-screen bg-gray-900 text-white p-8 flex flex-col items-center">
+        <p>Loading...</p>
+      </div>
+    );
+  if (error)
+    return (
+      <div className="min-h-screen bg-gray-900 text-white p-8 flex flex-col items-center">
+        <p>Error: {error.message}</p>
+      </div>
+    );
 
   const handleClick = (opponentId) => {
     router.push(`/events/${eventId}/entrants/${opponentId}`);
@@ -76,6 +92,9 @@ export default function EntrantSetsPage() {
                   <p>{entrantName}</p>
                 </div>
                 <div
+                  onMouseEnter={() => {
+                    queryClient.prefetchQuery(getOptions(eventId, opponent.id));
+                  }}
                   onClick={() => handleClick(opponent.id)}
                   className={`p-4 w-full text-center rounded-md cursor-pointer border-2 hover:opacity-80 ${
                     !isWinner
