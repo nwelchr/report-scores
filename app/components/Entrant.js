@@ -2,10 +2,29 @@
 
 import React from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+
+const fetchEntrantSets = async (eventId, entrantId) => {
+  const { data } = await axios.get(
+    `/api/events/${eventId}/entrants/${entrantId}`
+  );
+  return data;
+};
+
+const getOptions = (eventId, entrantId) => ({
+  queryKey: [
+    "entrantSets",
+    { eventId: String(eventId), entrantId: String(entrantId) },
+  ],
+  queryFn: () => fetchEntrantSets(eventId, entrantId),
+  enabled: !!eventId && !!entrantId,
+});
 
 const Entrant = ({ entrant }) => {
   const router = useRouter();
   const { eventId } = useParams();
+  const queryClient = useQueryClient();
 
   const handleEntrantClick = () => {
     router.push(`/events/${eventId}/entrants/${entrant.id}`);
@@ -17,6 +36,9 @@ const Entrant = ({ entrant }) => {
         entrant.placement
       )}`}
       onClick={handleEntrantClick}
+      onMouseEnter={() => {
+        queryClient.prefetchQuery(getOptions(eventId, entrant.id));
+      }}
     >
       {entrant.placement}. {entrant.name} (Seed {entrant.seeds[0].seedNum})
     </li>
