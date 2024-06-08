@@ -33,7 +33,13 @@ export default function EventPage() {
           <h3 className="text-xl mb-2">Standings</h3>
           <ul>
             {data.event.standings.nodes.map((standing) => (
-              <Entrant key={standing.entrant.id} standing={standing} />
+              <Entrant
+                key={standing.entrant.id}
+                entrant={{
+                  placement: standing.placement,
+                  ...standing.entrant,
+                }}
+              />
             ))}
           </ul>
         </div>

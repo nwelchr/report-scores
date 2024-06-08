@@ -1,6 +1,27 @@
 "use client";
 
 import React from "react";
+import { useRouter, useParams } from "next/navigation";
+
+const Entrant = ({ entrant }) => {
+  const router = useRouter();
+  const { eventId } = useParams();
+
+  const handleEntrantClick = () => {
+    router.push(`/events/${eventId}/entrants/${entrant.id}`);
+  };
+
+  return (
+    <li
+      className={`p-2 mb-2 rounded-md cursor-pointer ${getColorByPlacement(
+        entrant.placement
+      )}`}
+      onClick={handleEntrantClick}
+    >
+      {entrant.placement}. {entrant.name} (Seed {entrant.seeds[0].seedNum})
+    </li>
+  );
+};
 
 const getColorByPlacement = (placement) => {
   if (placement === 1) return "bg-emerald-600";
@@ -12,19 +33,6 @@ const getColorByPlacement = (placement) => {
   if (placement >= 9 && placement <= 16) return "bg-red-800";
   if (placement >= 17 && placement <= 32) return "bg-red-950";
   return "bg-gray-800";
-};
-
-const Entrant = ({ standing }) => {
-  return (
-    <li
-      className={`p-2 mb-2 rounded-md ${getColorByPlacement(
-        standing.placement
-      )}`}
-    >
-      {standing.placement}. {standing.entrant.name} (Seed{" "}
-      {standing.entrant.seeds[0].seedNum})
-    </li>
-  );
 };
 
 export default Entrant;
