@@ -24,6 +24,7 @@ const fetchEntrantSets = async (eventId, entrantId) => {
                 name
               }
               round
+              fullRoundText
               slots {
                 entrant {
                   id
@@ -36,6 +37,13 @@ const fetchEntrantSets = async (eventId, entrantId) => {
               displayScore
               state
               winnerId
+              phaseGroup {
+                id
+                phase {
+                  id
+                  name
+                }
+              }
             }
           }
         }
