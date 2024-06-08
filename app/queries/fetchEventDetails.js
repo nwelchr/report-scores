@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const fetchEventStandings = async (eventId) => {
+const fetchEventDetails = async (eventId) => {
   try {
     const query = `
       query EventStandings($eventId: ID!, $page: Int!, $perPage: Int!) {
@@ -34,19 +34,19 @@ const fetchEventStandings = async (eventId) => {
       { query, variables },
       {
         headers: {
-          Authorization: `Bearer 930e6c4b3544d5d0f8abeb786abe072c`, // Replace with your actual API key
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_START_GG_API_TOKEN}`,
         },
       }
     );
 
-    return response.data.data.event.standings.nodes;
+    return response.data.data.event;
   } catch (error) {
     console.error(
-      "Error fetching event standings:",
+      "Error fetching event details:",
       error.response ? error.response.data : error.message
     );
-    throw new Error("Failed to fetch event standings");
+    throw new Error("Failed to fetch event details");
   }
 };
 
-module.exports = fetchEventStandings;
+module.exports = fetchEventDetails;

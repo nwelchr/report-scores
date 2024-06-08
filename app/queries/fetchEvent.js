@@ -18,7 +18,7 @@ const fetchEvent = async (slug) => {
       { query, variables },
       {
         headers: {
-          Authorization: `Bearer 930e6c4b3544d5d0f8abeb786abe072c`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_START_GG_API_TOKEN}`,
         },
       }
     );

@@ -1,13 +1,12 @@
-// app/page.js
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import Entrant from "./components/Entrant";
+import { useRouter } from "next/navigation";
 
 const fetchEvent = async (slug) => {
-  const { data } = await axios.get(`/api/event`, { params: { slug } });
+  const { data } = await axios.get(`/api/events`, { params: { slug } });
   return data;
 };
 
@@ -23,16 +22,24 @@ const extractSlug = (input) => {
 
 export default function Page() {
   const [url, setUrl] = useState("");
-  const { data, error, isLoading } = useQuery({
+  const router = useRouter();
+
+  const { data, error, isLoading, isSuccess } = useQuery({
     queryKey: ["event", { slug: extractSlug(url) }],
-    queryFn: () => fetchEvent(extractSlug(url)),
+    queryFn: () => fetchEvent(extractSlug(url), router),
     enabled: !!extractSlug(url),
   });
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      router.push(`/events/${data.event.id}`);
+    }
+  }, [isSuccess, data, router]);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
       <h1 className="text-4xl mb-8">Fetch Event Data</h1>
-      <form className="mb-8">
+      <form className="mb-8" onSubmit={(e) => e.preventDefault()}>
         <input
           type="text"
           value={url}
@@ -47,12 +54,6 @@ export default function Page() {
         <div>
           <h2 className="text-2xl mb-4">{data.event.name}</h2>
           <p className="mb-4">ID: {data.event.id}</p>
-          <h3 className="text-xl mb-2">Standings</h3>
-          <ul>
-            {data.standings.map((standing) => (
-              <Entrant key={standing.entrant.id} standing={standing} />
-            ))}
-          </ul>
         </div>
       )}
     </div>

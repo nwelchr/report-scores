@@ -1,14 +1,18 @@
-import fetchEvent from "../../queries/fetchEvent";
-import fetchEventStandings from "../../queries/fetchEventStandings";
+import fetchEvent from "@/app/queries/fetchEvent";
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const slug = searchParams.get("slug");
 
+  if (!slug) {
+    return new Response(JSON.stringify({ error: "Missing slug" }), {
+      status: 400,
+    });
+  }
+
   try {
     const event = await fetchEvent(slug);
-    const standings = await fetchEventStandings(event.id);
-    return new Response(JSON.stringify({ event, standings }), { status: 200 });
+    return new Response(JSON.stringify({ event }), { status: 200 });
   } catch (error) {
     console.error(error);
     return new Response(
