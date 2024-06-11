@@ -4,10 +4,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
+import Autosuggest from "react-autosuggest";
 
 const fetchEntrants = async (eventId) => {
   const { data } = await axios.get(`/api/events/${eventId}/entrants`);
-  return data.entrants;
+  return data;
 };
 
 const fetchSets = async (eventId, entrantId) => {
@@ -24,19 +25,18 @@ const reportSet = async ({ setId, winnerId, score }) => {
 };
 
 export default function ReportPage() {
-  const [tag, setTag] = useState("");
   const [selectedEntrant, setSelectedEntrant] = useState(null);
   const [selectedSet, setSelectedSet] = useState(null);
   const [score, setScore] = useState("");
   const { eventId } = useParams();
 
   const { data: entrants, error: entrantsError } = useQuery({
-    queryKey: ["entrants", { eventId }],
+    queryKey: ["entrants", eventId],
     queryFn: () => fetchEntrants(eventId),
   });
 
   const { data: sets, error: setsError } = useQuery({
-    queryKey: ["entrants", selectedEntrant?.id],
+    queryKey: ["sets", selectedEntrant?.id],
     queryFn: () => fetchSets(eventId, selectedEntrant?.id),
     enabled: !!selectedEntrant,
   });
@@ -48,12 +48,12 @@ export default function ReportPage() {
     },
   });
 
-  const handleTagChange = (e) => {
-    setTag(e.target.value);
+  const handleTagChange = (event, { newValue }) => {
+    setSelectedEntrant((prevState) => ({ ...prevState, name: newValue }));
   };
 
-  const handleEntrantSelect = (entrant) => {
-    setSelectedEntrant(entrant);
+  const handleEntrantSelect = (event, { suggestion }) => {
+    setSelectedEntrant(suggestion);
   };
 
   const handleSetSelect = (set) => {
@@ -64,36 +64,48 @@ export default function ReportPage() {
     if (selectedSet && score) {
       const winnerId = selectedEntrant.id;
       const setId = selectedSet.id;
-      // mutation.mutate({ setId, winnerId, score });
+      mutate({ setId, winnerId, score });
     }
   };
+
+  const getSuggestions = (value) => {
+    const inputValue = value.trim().toLowerCase();
+    const inputLength = inputValue.length;
+    return inputLength === 0
+      ? []
+      : entrants.filter(
+          (entrant) =>
+            entrant.name.toLowerCase().slice(0, inputLength) === inputValue
+        );
+  };
+
+  const getSuggestionValue = (suggestion) => suggestion.name;
+
+  const renderSuggestion = (suggestion) => (
+    <div className="p-2 rounded-md bg-gray-700 cursor-pointer">
+      {suggestion.name}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8 flex flex-col items-center">
       <h1 className="text-4xl mb-8">Report Set</h1>
-      <input
-        type="text"
-        value={tag}
-        onChange={handleTagChange}
-        placeholder="Enter your tag"
-        className="p-2 rounded-md bg-violet-950 text-white w-full mb-4"
+      <Autosuggest
+        suggestions={getSuggestions(selectedEntrant?.name || "")}
+        onSuggestionsFetchRequested={({ value }) =>
+          setSelectedEntrant((prevState) => ({ ...prevState, name: value }))
+        }
+        onSuggestionsClearRequested={() => setSelectedEntrant(null)}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        inputProps={{
+          placeholder: "Enter your tag",
+          value: selectedEntrant?.name || "",
+          onChange: handleTagChange,
+          className: "p-2 rounded-md bg-violet-950 text-white w-full mb-4",
+        }}
+        onSuggestionSelected={handleEntrantSelect}
       />
-      <ul className="space-y-4 mb-8">
-        {entrants &&
-          entrants
-            .filter((entrant) =>
-              entrant.name.toLowerCase().includes(tag.toLowerCase())
-            )
-            .map((entrant) => (
-              <li
-                key={entrant.id}
-                className="p-2 rounded-md bg-gray-700 cursor-pointer"
-                onClick={() => handleEntrantSelect(entrant)}
-              >
-                {entrant.name}
-              </li>
-            ))}
-      </ul>
       {selectedEntrant && (
         <div className="w-full max-w-4xl">
           <h2 className="text-2xl mb-4">Select Your Set</h2>

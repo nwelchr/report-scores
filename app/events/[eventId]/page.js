@@ -24,8 +24,6 @@ export default function EventPage() {
     enabled: !!eventId,
   });
 
-  console.log({ entrants });
-
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
       {isLoading && <p className="text-xl">Loading...</p>}
