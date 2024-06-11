@@ -40,7 +40,7 @@ const Entrant = ({ entrant }) => {
         queryClient.prefetchQuery(getOptions(eventId, entrant.id));
       }}
     >
-      {entrant.placement}. {entrant.name} (Seed {entrant.seeds[0].seedNum})
+      {entrant.placement}. {entrant.name} (Seed {entrant.seed})
     </li>
   );
 };
