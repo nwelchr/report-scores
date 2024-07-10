@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Step3({ sets, onSelect, onBack }) {
+export default function OpponentSelection({ sets, onSelect, onBack }) {
   const renderSets = (sets) => {
     const inProgressOrNotStarted = sets.filter(
       (set) => set.state === "IN_PROGRESS" || set.state === "NOT_STARTED"

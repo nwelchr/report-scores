@@ -96,7 +96,6 @@ export default function ReportPage() {
   ]);
 
   useEffect(() => {
-    console.log("HELLOOOOHELLOOOOHELLOOOOHELLOOOOHELLOOOOHELLOOOOHELLOOOO");
     if (sets && sets.length) {
       const inProgressOrNotStarted = sets.filter(
         (set) => set.state === "IN_PROGRESS" || set.state === "NOT_STARTED"
@@ -117,6 +116,7 @@ export default function ReportPage() {
   const handleEntrantSelect = (suggestion) => {
     setSelectedEntrant(suggestion);
     setValue(suggestion.name);
+    console.log("Selected Entrant: ", suggestion);
     setStep(2);
   };
 

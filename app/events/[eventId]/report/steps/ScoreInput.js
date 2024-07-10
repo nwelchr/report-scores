@@ -18,7 +18,7 @@ const renderScoreBoxes = (score, setScore) => {
   );
 };
 
-export default function Step4({
+export default function ScoreInput({
   selectedEntrant,
   selectedSet,
   entrantScore,

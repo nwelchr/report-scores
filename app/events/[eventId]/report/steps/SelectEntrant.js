@@ -1,7 +1,7 @@
 import React from "react";
 import AutosuggestInput from "./AutosuggestInput";
 
-export default function Step1({ value, entrants, onChange, onSelect }) {
+export default function SelectEntrant({ value, entrants, onChange, onSelect }) {
   return (
     <>
       <h1 className="text-4xl mb-8 text-center">Report Set</h1>
