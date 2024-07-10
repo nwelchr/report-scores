@@ -1,4 +1,7 @@
 import React from "react";
+import { waveform } from "ldrs";
+
+waveform.register();
 
 export default function OpponentConfirmation({ filteredSets, onSelect, onNo }) {
   return (
@@ -10,19 +13,26 @@ export default function OpponentConfirmation({ filteredSets, onSelect, onNo }) {
           </p>
           <button
             onClick={() => onSelect(filteredSets[0])}
-            className="mt-4 p-2 rounded-md bg-emerald-600 text-white"
+            className="m-4 px-4 py-2 border-2 rounded-md bg-emerald-950 border-emerald-700 text-white"
           >
             Yes
           </button>
           <button
             onClick={onNo}
-            className="mt-4 p-2 rounded-md bg-red-600 text-white"
+            className="m-4 px-4 p-2 border-2 rounded-md bg-rose-950 border-rose-700 text-white"
           >
             No
           </button>
         </>
       ) : (
-        <p>No sets available to confirm opponent.</p>
+        <>
+          <l-waveform
+            size="80"
+            stroke="3"
+            speed="1.5"
+            color="white"
+          ></l-waveform>
+        </>
       )}
     </div>
   );

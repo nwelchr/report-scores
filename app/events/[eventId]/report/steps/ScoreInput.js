@@ -30,7 +30,7 @@ export default function ScoreInput({
 }) {
   return (
     <div className="mt-8 w-full max-w-4xl text-center">
-      <h2 className="text-2xl mb-4">Enter the Score</h2>
+      <h2 className="text-2xl mb-4">Enter Score</h2>
       <div className="flex flex-col items-center mb-4">
         <div className="flex flex-col items-center mb-4">
           <p className="mb-2">{selectedEntrant.name}</p>
@@ -43,13 +43,13 @@ export default function ScoreInput({
       </div>
       <button
         onClick={onSubmit}
-        className="p-2 rounded-md bg-emerald-600 text-white"
+        className="m-4 px-4 py-2 border-2 rounded-md bg-emerald-950 border-emerald-700 text-white"
       >
         Submit
       </button>
       <button
         onClick={onBack}
-        className="mt-4 p-2 rounded-md bg-red-600 text-white"
+        className="m-4 px-4 py-2 border-2  bg-rose-950 border-rose-700 text-white"
       >
         Back
       </button>

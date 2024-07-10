@@ -34,7 +34,7 @@ export default function OpponentSelection({ sets, onSelect, onBack }) {
       {renderSets(sets || [])}
       <button
         onClick={onBack}
-        className="mt-4 p-2 rounded-md bg-red-600 text-white"
+        className="m-4 px-4 py-2 border-2  bg-rose-950 border-rose-700 text-white"
       >
         Back
       </button>

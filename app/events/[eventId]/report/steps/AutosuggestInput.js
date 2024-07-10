@@ -36,8 +36,10 @@ export default function AutosuggestInput({
       inputProps={{
         placeholder: "Enter your tag",
         value,
+        size: 30,
         onChange: (e, { newValue }) => onChange(newValue),
-        className: "p-2 rounded-md bg-violet-950 text-white w-full mb-4",
+        className:
+          "p-2 rounded-md bg-violet-950 text-white w-full mb-4 text-2xl text-center",
       }}
       onSuggestionSelected={(e, { suggestion }) => onSelect(suggestion)}
     />
