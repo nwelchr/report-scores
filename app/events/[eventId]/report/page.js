@@ -1,10 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import Autosuggest from "react-autosuggest";
+import AutosuggestInput from "./AutoSuggestInput";
+import {
+  saveToLocalStorage,
+  getFromLocalStorage,
+  removeFromLocalStorage,
+} from "./utils";
 
 const fetchEntrants = async (eventId) => {
   const { data } = await axios.get(`/api/events/${eventId}/entrants`);
@@ -13,7 +18,7 @@ const fetchEntrants = async (eventId) => {
 
 const fetchSets = async (eventId, entrantId) => {
   const { data } = await axios.get(
-    `/api/events/${eventId}/entrants/${entrantId}`
+    `/api/events/${eventId}/entrants/${entrantId}/sets`
   );
   return data.sets;
 };
@@ -25,90 +30,99 @@ const reportSet = async ({ setId, winnerId, score }) => {
 };
 
 export default function ReportPage() {
+  const { eventId } = useParams();
+  const [step, setStep] = useState(1);
   const [selectedEntrant, setSelectedEntrant] = useState(null);
   const [selectedSet, setSelectedSet] = useState(null);
-  const [score, setScore] = useState("");
-  const { eventId } = useParams();
+  const [entrantScore, setEntrantScore] = useState("");
+  const [opponentScore, setOpponentScore] = useState("");
+  const [value, setValue] = useState("");
 
-  const { data: entrants, error: entrantsError } = useQuery({
+  const { data: entrants } = useQuery({
     queryKey: ["entrants", eventId],
     queryFn: () => fetchEntrants(eventId),
   });
 
-  const { data: sets, error: setsError } = useQuery({
+  const { data: sets } = useQuery({
     queryKey: ["sets", selectedEntrant?.id],
     queryFn: () => fetchSets(eventId, selectedEntrant?.id),
-    enabled: !!selectedEntrant,
+    enabled: !!selectedEntrant?.id,
   });
+
+  console.log({ sets });
 
   const { mutate } = useMutation({
     mutationFn: reportSet,
     onSuccess: () => {
       console.log("Set reported successfully");
+      removeFromLocalStorage("reportState");
+      setStep(4);
     },
   });
 
-  const handleTagChange = (event, { newValue }) => {
-    setSelectedEntrant((prevState) => ({ ...prevState, name: newValue }));
-  };
+  useEffect(() => {
+    const savedState = getFromLocalStorage("reportState");
+    if (savedState) {
+      setStep(savedState.step);
+      setSelectedEntrant(savedState.selectedEntrant);
+      setSelectedSet(savedState.selectedSet);
+      setEntrantScore(savedState.entrantScore);
+      setOpponentScore(savedState.opponentScore);
+      setValue(savedState.value);
+    }
+  }, []);
 
-  const handleEntrantSelect = (event, { suggestion }) => {
+  useEffect(() => {
+    saveToLocalStorage("reportState", {
+      step,
+      selectedEntrant,
+      selectedSet,
+      entrantScore,
+      opponentScore,
+      value,
+    });
+  }, [step, selectedEntrant, selectedSet, entrantScore, opponentScore, value]);
+
+  const handleEntrantSelect = (suggestion) => {
     setSelectedEntrant(suggestion);
+    setValue(suggestion.name);
+    setStep(2);
   };
 
   const handleSetSelect = (set) => {
     setSelectedSet(set);
+    setStep(3);
   };
 
   const handleSubmit = () => {
-    if (selectedSet && score) {
-      const winnerId = selectedEntrant.id;
+    if (selectedSet && entrantScore && opponentScore) {
+      const winnerId =
+        entrantScore > opponentScore
+          ? selectedEntrant.id
+          : selectedSet.opponent.id;
       const setId = selectedSet.id;
-      mutate({ setId, winnerId, score });
+      mutate({ setId, winnerId, score: `${entrantScore}-${opponentScore}` });
     }
   };
 
-  const getSuggestions = (value) => {
-    const inputValue = value.trim().toLowerCase();
-    const inputLength = inputValue.length;
-    return inputLength === 0
-      ? []
-      : entrants.filter(
-          (entrant) =>
-            entrant.name.toLowerCase().slice(0, inputLength) === inputValue
-        );
+  const handleBack = () => {
+    setStep(step - 1);
   };
-
-  const getSuggestionValue = (suggestion) => suggestion.name;
-
-  const renderSuggestion = (suggestion) => (
-    <div className="p-2 rounded-md bg-gray-700 cursor-pointer">
-      {suggestion.name}
-    </div>
-  );
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8 flex flex-col items-center">
       <h1 className="text-4xl mb-8">Report Set</h1>
-      <Autosuggest
-        suggestions={getSuggestions(selectedEntrant?.name || "")}
-        onSuggestionsFetchRequested={({ value }) =>
-          setSelectedEntrant((prevState) => ({ ...prevState, name: value }))
-        }
-        onSuggestionsClearRequested={() => setSelectedEntrant(null)}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        inputProps={{
-          placeholder: "Enter your tag",
-          value: selectedEntrant?.name || "",
-          onChange: handleTagChange,
-          className: "p-2 rounded-md bg-violet-950 text-white w-full mb-4",
-        }}
-        onSuggestionSelected={handleEntrantSelect}
-      />
-      {selectedEntrant && (
+      {step === 1 && (
+        <AutosuggestInput
+          value={value}
+          onChange={setValue}
+          onSelect={handleEntrantSelect}
+          suggestions={entrants || []}
+        />
+      )}
+      {step === 2 && (
         <div className="w-full max-w-4xl">
-          <h2 className="text-2xl mb-4">Select Your Set</h2>
+          <h2 className="text-2xl mb-4">Select Your Opponent</h2>
           <ul className="space-y-4">
             {sets &&
               sets.map((set) => (
@@ -121,24 +135,56 @@ export default function ReportPage() {
                 </li>
               ))}
           </ul>
+          <button
+            onClick={handleBack}
+            className="mt-4 p-2 rounded-md bg-red-600 text-white"
+          >
+            Back
+          </button>
         </div>
       )}
-      {selectedSet && (
-        <div className="mt-8">
+      {step === 3 && (
+        <div className="mt-8 w-full max-w-4xl">
           <h2 className="text-2xl mb-4">Enter the Score</h2>
-          <input
-            type="text"
-            value={score}
-            onChange={(e) => setScore(e.target.value)}
-            placeholder="Enter the score (e.g., 3-0)"
-            className="p-2 rounded-md bg-violet-950 text-white mb-4"
-          />
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex flex-col items-center">
+              <p className="mb-2">{selectedEntrant.name}</p>
+              <input
+                type="number"
+                value={entrantScore}
+                onChange={(e) => setEntrantScore(e.target.value)}
+                placeholder="Player Score"
+                className="p-2 rounded-md bg-violet-950 text-white"
+              />
+            </div>
+            <div className="flex flex-col items-center">
+              <p className="mb-2">{selectedSet.opponent.name}</p>
+              <input
+                type="number"
+                value={opponentScore}
+                onChange={(e) => setOpponentScore(e.target.value)}
+                placeholder="Opponent Score"
+                className="p-2 rounded-md bg-violet-950 text-white"
+              />
+            </div>
+          </div>
           <button
             onClick={handleSubmit}
             className="p-2 rounded-md bg-emerald-600 text-white"
           >
             Submit
           </button>
+          <button
+            onClick={handleBack}
+            className="mt-4 p-2 rounded-md bg-red-600 text-white"
+          >
+            Back
+          </button>
+        </div>
+      )}
+      {step === 4 && (
+        <div className="mt-8">
+          <h2 className="text-2xl mb-4">Score Submitted</h2>
         </div>
       )}
     </div>
