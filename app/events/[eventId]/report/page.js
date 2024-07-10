@@ -1,15 +1,19 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import AutosuggestInput from "./AutoSuggestInput";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import {
   saveToLocalStorage,
   getFromLocalStorage,
   removeFromLocalStorage,
 } from "./utils";
+import SelectEntrant from "./steps/SelectEntrant";
+import OpponentConfirmation from "./steps/OpponentConfirmation";
+import OpponentSelection from "./steps/OpponentSelection";
+import ScoreInput from "./steps/ScoreInput";
+import SubmissionConfirmation from "./steps/SubmissionConfirmation";
 
 const fetchEntrants = async (eventId) => {
   const { data } = await axios.get(`/api/events/${eventId}/entrants`);
@@ -34,8 +38,9 @@ export default function ReportPage() {
   const [step, setStep] = useState(1);
   const [selectedEntrant, setSelectedEntrant] = useState(null);
   const [selectedSet, setSelectedSet] = useState(null);
-  const [entrantScore, setEntrantScore] = useState("");
-  const [opponentScore, setOpponentScore] = useState("");
+  const [filteredSets, setFilteredSets] = useState([]);
+  const [entrantScore, setEntrantScore] = useState(null);
+  const [opponentScore, setOpponentScore] = useState(null);
   const [value, setValue] = useState("");
 
   const { data: entrants } = useQuery({
@@ -49,14 +54,12 @@ export default function ReportPage() {
     enabled: !!selectedEntrant?.id,
   });
 
-  console.log({ sets });
-
   const { mutate } = useMutation({
     mutationFn: reportSet,
     onSuccess: () => {
       console.log("Set reported successfully");
       removeFromLocalStorage("reportState");
-      setStep(4);
+      setStep(5);
     },
   });
 
@@ -77,11 +80,39 @@ export default function ReportPage() {
       step,
       selectedEntrant,
       selectedSet,
+      filteredSets,
       entrantScore,
       opponentScore,
       value,
     });
-  }, [step, selectedEntrant, selectedSet, entrantScore, opponentScore, value]);
+  }, [
+    step,
+    selectedEntrant,
+    selectedSet,
+    filteredSets,
+    entrantScore,
+    opponentScore,
+    value,
+  ]);
+
+  useEffect(() => {
+    console.log("HELLOOOOHELLOOOOHELLOOOOHELLOOOOHELLOOOOHELLOOOOHELLOOOO");
+    if (sets && sets.length) {
+      const inProgressOrNotStarted = sets.filter(
+        (set) => set.state === "IN_PROGRESS" || set.state === "NOT_STARTED"
+      );
+      console.log({ sets, inProgressOrNotStarted });
+      setFilteredSets(inProgressOrNotStarted);
+      if (inProgressOrNotStarted.length > 1) {
+        console.warn("More than one set in progress for this user.");
+      }
+      if (inProgressOrNotStarted.length === 1) {
+        setStep(2);
+      } else {
+        setStep(3);
+      }
+    }
+  }, [sets]);
 
   const handleEntrantSelect = (suggestion) => {
     setSelectedEntrant(suggestion);
@@ -91,11 +122,11 @@ export default function ReportPage() {
 
   const handleSetSelect = (set) => {
     setSelectedSet(set);
-    setStep(3);
+    setStep(4);
   };
 
   const handleSubmit = () => {
-    if (selectedSet && entrantScore && opponentScore) {
+    if (selectedSet && entrantScore !== null && opponentScore !== null) {
       const winnerId =
         entrantScore > opponentScore
           ? selectedEntrant.id
@@ -106,87 +137,65 @@ export default function ReportPage() {
   };
 
   const handleBack = () => {
-    setStep(step - 1);
+    if (step === 4 && filteredSets.length === 1) {
+      setStep(2);
+    } else if (step === 4) {
+      setStep(3);
+    } else {
+      setStep(step - 1);
+    }
+  };
+
+  const renderStep = () => {
+    switch (step) {
+      case 1:
+        return (
+          <SelectEntrant
+            value={value}
+            entrants={entrants}
+            onChange={setValue}
+            onSelect={handleEntrantSelect}
+          />
+        );
+      case 2:
+        return (
+          <OpponentConfirmation
+            filteredSets={filteredSets}
+            onSelect={handleSetSelect}
+            onNo={() => setStep(3)}
+          />
+        );
+      case 3:
+        return (
+          <OpponentSelection
+            sets={sets}
+            onSelect={handleSetSelect}
+            onBack={handleBack}
+          />
+        );
+      case 4:
+        return (
+          <ScoreInput
+            selectedEntrant={selectedEntrant}
+            selectedSet={selectedSet}
+            entrantScore={entrantScore}
+            setEntrantScore={setEntrantScore}
+            opponentScore={opponentScore}
+            setOpponentScore={setOpponentScore}
+            onSubmit={handleSubmit}
+            onBack={handleBack}
+          />
+        );
+      case 5:
+        return <SubmissionConfirmation />;
+      default:
+        return null;
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8 flex flex-col items-center">
-      <h1 className="text-4xl mb-8">Report Set</h1>
-      {step === 1 && (
-        <AutosuggestInput
-          value={value}
-          onChange={setValue}
-          onSelect={handleEntrantSelect}
-          suggestions={entrants || []}
-        />
-      )}
-      {step === 2 && (
-        <div className="w-full max-w-4xl">
-          <h2 className="text-2xl mb-4">Select Your Opponent</h2>
-          <ul className="space-y-4">
-            {sets &&
-              sets.map((set) => (
-                <li
-                  key={set.id}
-                  className="p-2 rounded-md bg-gray-700 cursor-pointer"
-                  onClick={() => handleSetSelect(set)}
-                >
-                  {set.opponent.name}
-                </li>
-              ))}
-          </ul>
-          <button
-            onClick={handleBack}
-            className="mt-4 p-2 rounded-md bg-red-600 text-white"
-          >
-            Back
-          </button>
-        </div>
-      )}
-      {step === 3 && (
-        <div className="mt-8 w-full max-w-4xl">
-          <h2 className="text-2xl mb-4">Enter the Score</h2>
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex flex-col items-center">
-              <p className="mb-2">{selectedEntrant.name}</p>
-              <input
-                type="number"
-                value={entrantScore}
-                onChange={(e) => setEntrantScore(e.target.value)}
-                placeholder="Player Score"
-                className="p-2 rounded-md bg-violet-950 text-white"
-              />
-            </div>
-            <div className="flex flex-col items-center">
-              <p className="mb-2">{selectedSet.opponent.name}</p>
-              <input
-                type="number"
-                value={opponentScore}
-                onChange={(e) => setOpponentScore(e.target.value)}
-                placeholder="Opponent Score"
-                className="p-2 rounded-md bg-violet-950 text-white"
-              />
-            </div>
-          </div>
-          <button
-            onClick={handleSubmit}
-            className="p-2 rounded-md bg-emerald-600 text-white"
-          >
-            Submit
-          </button>
-          <button
-            onClick={handleBack}
-            className="mt-4 p-2 rounded-md bg-red-600 text-white"
-          >
-            Back
-          </button>
-        </div>
-      )}
-      {step === 4 && (
-        <div className="mt-8">
-          <h2 className="text-2xl mb-4">Score Submitted</h2>
-        </div>
-      )}
+    <div className="min-h-screen bg-gray-900 text-white p-8 flex flex-col justify-center items-center">
+      {renderStep()}
     </div>
   );
 }
