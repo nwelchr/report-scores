@@ -19,9 +19,12 @@ export default function OpponentSelection({ sets, onSelect, onBack }) {
           </li>
         ))}
         {completed.map((set) => (
-          <li key={set.id} className="p-2 rounded-md bg-gray-700">
-            {set.opponent.name} - Won/Lost {set.entrantScore} -{" "}
-            {set.opponentScore}
+          <li
+            key={set.id}
+            className="p-2 rounded-md bg-gray-700"
+            onClick={() => onSelect(set)}
+          >
+            {set.opponent.name}: {set.entrantScore} - {set.opponentScore}
           </li>
         ))}
       </ul>
@@ -34,7 +37,7 @@ export default function OpponentSelection({ sets, onSelect, onBack }) {
       {renderSets(sets || [])}
       <button
         onClick={onBack}
-        className="m-4 px-4 py-2 border-2  bg-rose-950 border-rose-700 text-white"
+        className="m-4 px-4 py-2 border-2 bg-rose-950 border-rose-700 text-white"
       >
         Back
       </button>
