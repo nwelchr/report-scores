@@ -7,7 +7,7 @@ import axios from "axios";
 
 const fetchEntrantSets = async (eventId, entrantId) => {
   const { data } = await axios.get(
-    `/api/events/${eventId}/entrants/${entrantId}`
+    `/api/events/${eventId}/entrants/${entrantId}/sets`
   );
   return data;
 };
@@ -32,7 +32,7 @@ const Entrant = ({ entrant }) => {
 
   return (
     <li
-      className={`p-2 mb-2 rounded-md cursor-pointer ${getColorByPlacement(
+      className={`p-2 mb-2 rounded-md cursor-pointer border-2 ${getColorByPlacement(
         entrant.placement
       )}`}
       onClick={handleEntrantClick}
@@ -46,15 +46,16 @@ const Entrant = ({ entrant }) => {
 };
 
 const getColorByPlacement = (placement) => {
-  if (placement === 1) return "bg-emerald-600";
-  if (placement === 2) return "bg-teal-600";
-  if (placement === 3) return "bg-cyan-600";
-  if (placement === 4) return "bg-indigo-600";
-  if (placement === 5) return "bg-violet-600";
-  if (placement === 7) return "bg-rose-600";
-  if (placement >= 9 && placement <= 16) return "bg-red-800";
-  if (placement >= 17 && placement <= 32) return "bg-red-950";
-  return "bg-gray-800";
+  if (placement === 1) return "bg-emerald-950 border-emerald-700";
+  if (placement === 2) return "bg-teal-950 border-teal-700";
+  if (placement === 3) return "bg-cyan-950 border-cyan-700";
+  if (placement === 4) return "bg-indigo-950 border-indigo-700";
+  if (placement === 5) return "bg-violet-950 border-violet-700";
+  if (placement === 7) return "bg-purple-950 border-purple-700";
+  if (placement >= 9 && placement <= 16)
+    return "bg-fuchsia-950 border-fuchsia-700";
+  if (placement >= 17 && placement <= 32) return "bg-rose-950 border-rose-700";
+  return "bg-gray-950 border-gray-700";
 };
 
 export default Entrant;

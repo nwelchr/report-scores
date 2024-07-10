@@ -16,7 +16,7 @@ const getOptions = (eventId, entrantId) => ({
 
 const fetchEntrantSets = async (eventId, entrantId) => {
   const { data } = await axios.get(
-    `/api/events/${eventId}/entrants/${entrantId}`
+    `/api/events/${eventId}/entrants/${entrantId}/sets`
   );
   return data;
 };
@@ -45,6 +45,8 @@ export default function EntrantSetsPage() {
     router.push(`/events/${eventId}/entrants/${opponentId}`);
   };
 
+  console.log({ data });
+
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8 flex flex-col items-center">
       <h2 className="text-4xl mb-4">{data.entrant.name}</h2>
@@ -56,38 +58,42 @@ export default function EntrantSetsPage() {
           <div className="col-span-1">Score</div>
         </div>
         <ul className="space-y-8 mt-4">
-          {data.entrant.paginatedSets.nodes.map((set) => {
-            const [winnerPart, loserPart] = set.displayScore.split(" - ");
-            const winnerScore = winnerPart.split(" ").pop();
-            const winner = winnerPart.slice(0, winnerPart.lastIndexOf(" "));
-            const loserScore = loserPart.split(" ").pop();
-            const loser = loserPart.slice(0, loserPart.lastIndexOf(" "));
-
+          {data.sets.map((set) => {
             const entrantName = data.entrant.name;
-            const opponent = set.slots.find(
-              (slot) => slot.entrant.id !== parseInt(entrantId)
-            ).entrant;
-            const isWinner = set.winnerId === parseInt(entrantId);
+            const opponent = set.opponent;
+            const entrantScore =
+              set.entrantScore !== null ? set.entrantScore : "-";
+            const opponentScore =
+              set.opponentScore !== null ? set.opponentScore : "-";
 
-            const entrantScore = isWinner ? winnerScore : loserScore;
-            const opponentScore = isWinner ? loserScore : winnerScore;
+            let entrantClass = "";
+            let opponentClass = "";
+            if (set.state === "COMPLETE") {
+              entrantClass =
+                set.winnerId === parseInt(entrantId)
+                  ? "border-emerald-700 bg-emerald-950"
+                  : "border-rose-700 bg-rose-950";
+              opponentClass =
+                set.winnerId === parseInt(opponent.id)
+                  ? "border-emerald-700 bg-emerald-950"
+                  : "border-rose-700 bg-rose-950";
+            } else {
+              entrantClass =
+                set.state === "IN_PROGRESS"
+                  ? "border-violet-700 bg-violet-950"
+                  : "border-gray-700 bg-gray-950";
+              opponentClass = entrantClass;
+            }
 
             return (
               <li key={set.id} className="grid grid-cols-4 gap-4 text-center">
-                <div className="text-gray-500">
-                  <span className="block text-sm">
-                    {set.phaseGroup.phase.name}
-                  </span>
+                <div className="text-gray-500 flex justify-center items-center">
                   <span className="block text-gray-300">
                     {set.fullRoundText}
                   </span>
                 </div>
                 <div
-                  className={`p-4 w-full text-center rounded-md cursor-pointer border-2 ${
-                    isWinner
-                      ? "border-emerald-600 bg-emerald-950"
-                      : "border-rose-600 bg-rose-950"
-                  }`}
+                  className={`p-4 w-full text-center rounded-md cursor-pointer border-2 ${entrantClass}`}
                 >
                   <p>{entrantName}</p>
                 </div>
@@ -96,16 +102,16 @@ export default function EntrantSetsPage() {
                     queryClient.prefetchQuery(getOptions(eventId, opponent.id));
                   }}
                   onClick={() => handleClick(opponent.id)}
-                  className={`p-4 w-full text-center rounded-md cursor-pointer border-2 hover:opacity-80 ${
-                    !isWinner
-                      ? "border-emerald-600 bg-emerald-950"
-                      : "border-rose-600 bg-rose-950"
-                  }`}
+                  className={`p-4 w-full text-center rounded-md cursor-pointer border-2 hover:opacity-80 ${opponentClass}`}
                 >
                   <p>{opponent.name}</p>
                 </div>
                 <p className="text-2xl flex items-center justify-center">
-                  {entrantScore}-{opponentScore}
+                  {set.state === "COMPLETE"
+                    ? `${entrantScore}-${opponentScore}`
+                    : set.state === "IN_PROGRESS"
+                    ? "In Progress"
+                    : "Not Started"}
                 </p>
               </li>
             );
