@@ -78,7 +78,6 @@ export async function GET(req, { params }) {
       sets: transformedSets,
     };
 
-    console.log(JSON.stringify(sets));
     return new Response(JSON.stringify(responseData), { status: 200 });
   } catch (error) {
     console.error(error);

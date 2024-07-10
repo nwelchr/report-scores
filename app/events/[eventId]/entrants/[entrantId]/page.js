@@ -45,8 +45,6 @@ export default function EntrantSetsPage() {
     router.push(`/events/${eventId}/entrants/${opponentId}`);
   };
 
-  console.log({ data });
-
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8 flex flex-col items-center">
       <h2 className="text-4xl mb-4">{data.entrant.name}</h2>

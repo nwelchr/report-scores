@@ -27,10 +27,20 @@ const fetchSets = async (eventId, entrantId) => {
   return data.sets;
 };
 
-const reportSet = async ({ setId, winnerId, score }) => {
-  console.log(
-    `Reporting set ${setId} with winner ${winnerId} and score ${score}`
-  );
+const reportSet = async ({
+  eventId,
+  setId,
+  winnerId,
+  entrantScore,
+  opponentScore,
+}) => {
+  const response = await axios.post(`/api/events/${eventId}/report`, {
+    setId,
+    winnerId,
+    entrantScore,
+    opponentScore,
+  });
+  return response.data;
 };
 
 export default function ReportPage() {
@@ -100,7 +110,6 @@ export default function ReportPage() {
       const inProgressOrNotStarted = sets.filter(
         (set) => set.state === "IN_PROGRESS" || set.state === "NOT_STARTED"
       );
-      console.log({ sets, inProgressOrNotStarted });
       setFilteredSets(inProgressOrNotStarted);
       if (inProgressOrNotStarted.length > 1) {
         console.warn("More than one set in progress for this user.");
@@ -116,7 +125,6 @@ export default function ReportPage() {
   const handleEntrantSelect = (suggestion) => {
     setSelectedEntrant(suggestion);
     setValue(suggestion.name);
-    console.log("Selected Entrant: ", suggestion);
     setStep(2);
   };
 
@@ -132,7 +140,7 @@ export default function ReportPage() {
           ? selectedEntrant.id
           : selectedSet.opponent.id;
       const setId = selectedSet.id;
-      mutate({ setId, winnerId, score: `${entrantScore}-${opponentScore}` });
+      mutate({ eventId, setId, winnerId, entrantScore, opponentScore });
     }
   };
 
