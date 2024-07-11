@@ -118,7 +118,7 @@ export default function ScoreInput({
                   onSubmit(localGameData);
                   setIsOpen(false);
                 }}
-                className="w-full px-4 py-2 text-lg border rounded-md bg-emerald-950 border-emerald-700 text-white data-[hover]:bg-emerald-800 data-[active]:bg-emerald-700"
+                className="w-full max-w-sm px-4 py-2 text-lg border rounded-md bg-emerald-950 border-emerald-700 text-white data-[hover]:bg-emerald-800 data-[active]:bg-emerald-700"
               >
                 Submit
               </Button>
@@ -128,7 +128,7 @@ export default function ScoreInput({
                 onBack();
                 setIsOpen(false);
               }}
-              className="w-full px-4 py-2 text-lg border rounded-md bg-rose-950 border-rose-700 text-white data-[hover]:bg-rose-800 data-[active]:bg-rose-700"
+              className="w-full max-w-sm px-4 py-2 text-lg border rounded-md bg-rose-950 border-rose-700 text-white data-[hover]:bg-rose-800 data-[active]:bg-rose-700"
             >
               Back
             </Button>

@@ -1,9 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Description,
+} from "@headlessui/react";
 
 export default function SubmissionConfirmation() {
+  const [isOpen, setIsOpen] = useState(true);
+
   return (
-    <div className="mt-8 text-center">
-      <h2 className="text-2xl mb-4">Score Submitted!</h2>
-    </div>
+    <Dialog
+      open={isOpen}
+      onClose={() => setIsOpen(false)}
+      className="relative z-50"
+    >
+      <div className="fixed inset-0 bg-black bg-opacity-50"></div>
+      <div className="fixed inset-0 flex items-center justify-center p-4">
+        <DialogPanel className="w-full max-w-md bg-gray-800 p-6 rounded-md shadow-lg text-center">
+          <DialogTitle className="text-2xl text-white">
+            Score Submitted!
+          </DialogTitle>
+        </DialogPanel>
+      </div>
+    </Dialog>
   );
 }
