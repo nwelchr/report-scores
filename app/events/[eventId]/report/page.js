@@ -118,22 +118,18 @@ export default function ReportPage() {
     setStep(4);
   };
 
-  const handleGameDataUpdate = (gameIndex, winnerId) => {
-    const newGameData = [...gameData];
-    newGameData[gameIndex] = { winnerId, gameNum: gameIndex + 1 };
-    setGameData(newGameData);
-  };
-
-  const handleSubmit = () => {
-    if (selectedSet && gameData.length) {
+  const handleSubmit = (localGameData) => {
+    if (selectedSet && localGameData.length) {
       const winnerId =
-        gameData.filter((game) => game.winnerId === selectedEntrant.id).length >
-        gameData.filter((game) => game.winnerId === selectedSet.opponent.id)
-          .length
+        localGameData.filter((game) => game.winnerId === selectedEntrant.id)
+          .length >
+        localGameData.filter(
+          (game) => game.winnerId === selectedSet.opponent.id
+        ).length
           ? selectedEntrant.id
           : selectedSet.opponent.id;
       const setId = selectedSet.id;
-      mutate({ eventId, setId, winnerId, gameData });
+      mutate({ eventId, setId, winnerId, gameData: localGameData });
     }
   };
 
@@ -178,7 +174,7 @@ export default function ReportPage() {
         return (
           <BestOf
             onSelect={(bestOf) => {
-              setGameData(Array(bestOf).fill({}));
+              setGameData(Array(bestOf).fill({ gameNum: 1 }));
               setStep(5);
             }}
           />
@@ -189,7 +185,6 @@ export default function ReportPage() {
             selectedEntrant={selectedEntrant}
             selectedSet={selectedSet}
             gameData={gameData}
-            onGameDataUpdate={handleGameDataUpdate}
             onSubmit={handleSubmit}
             onBack={handleBack}
           />
