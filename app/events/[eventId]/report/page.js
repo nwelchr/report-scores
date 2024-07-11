@@ -52,6 +52,7 @@ export default function ReportPage() {
   const [entrantScore, setEntrantScore] = useState(null);
   const [opponentScore, setOpponentScore] = useState(null);
   const [value, setValue] = useState("");
+  const [shouldFetchSets, setShouldFetchSets] = useState(true);
 
   const { data: entrants } = useQuery({
     queryKey: ["entrants", eventId],
@@ -61,7 +62,7 @@ export default function ReportPage() {
   const { data: sets } = useQuery({
     queryKey: ["sets", selectedEntrant?.id],
     queryFn: () => fetchSets(eventId, selectedEntrant?.id),
-    enabled: !!selectedEntrant?.id,
+    enabled: !!selectedEntrant?.id && shouldFetchSets,
   });
 
   const { mutate } = useMutation({
@@ -70,6 +71,7 @@ export default function ReportPage() {
       console.log("Set reported successfully");
       removeFromLocalStorage("reportState");
       setStep(5);
+      setShouldFetchSets(false); // Disable fetching sets after reporting, TODO make this work better
     },
   });
 

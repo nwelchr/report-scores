@@ -24,9 +24,7 @@ const reportSet = async ({ setId, winnerId, entrantScore, opponentScore }) => {
     }
   );
 
-  console.log({ response });
-
-  return response;
+  return response.data.data;
 };
 
 export default reportSet;
