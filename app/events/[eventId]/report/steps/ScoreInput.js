@@ -1,4 +1,11 @@
 import React, { useState, useMemo } from "react";
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Description,
+  Button,
+} from "@headlessui/react";
 
 export default function ScoreInput({
   selectedEntrant,
@@ -7,6 +14,7 @@ export default function ScoreInput({
   onSubmit,
   onBack,
 }) {
+  const [isOpen, setIsOpen] = useState(true);
   const [localGameData, setLocalGameData] = useState(
     gameData.map((_, index) => ({ gameNum: index + 1 }))
   );
@@ -44,64 +52,89 @@ export default function ScoreInput({
   };
 
   return (
-    <div className="mt-8 w-full max-w-4xl text-center">
-      <h2 className="text-4xl mb-4">Enter Games</h2>
-      <div className="grid grid-cols-1 gap-4">
-        {localGameData.map((game, index) => (
-          <div key={index} className="flex justify-center space-x-4 mb-4">
-            <button
-              onClick={() => handleGameDataUpdate(index, selectedEntrant.id)}
-              disabled={
-                (index > 0 && !localGameData[index - 1].winnerId) || canSubmit
-              }
-              className={`px-8 py-4 border-4 rounded-md text-2xl ${
-                game.winnerId === selectedEntrant.id
-                  ? "bg-emerald-950 border-emerald-700 text-white"
-                  : "bg-gray-950 border-gray-700 text-white"
-              } ${
-                (index > 0 && !localGameData[index - 1].winnerId) || canSubmit
-                  ? "opacity-50 cursor-not-allowed"
-                  : ""
-              }`}
-            >
-              Win
-            </button>
-            <button
-              onClick={() =>
-                handleGameDataUpdate(index, selectedSet.opponent.id)
-              }
-              disabled={
-                (index > 0 && !localGameData[index - 1].winnerId) || canSubmit
-              }
-              className={`px-8 py-4 border-4 rounded-md text-2xl ${
-                game.winnerId === selectedSet.opponent.id
-                  ? "bg-rose-950 border-rose-700 text-white"
-                  : "bg-gray-950 border-gray-700 text-white"
-              } ${
-                (index > 0 && !localGameData[index - 1].winnerId) || canSubmit
-                  ? "opacity-50 cursor-not-allowed"
-                  : ""
-              }`}
-            >
-              Lose
-            </button>
+    <Dialog
+      open={isOpen}
+      onClose={() => setIsOpen(false)}
+      className="relative z-50"
+    >
+      <div className="fixed inset-0 bg-black bg-opacity-50"></div>
+      <div className="fixed inset-0 flex items-center justify-center p-4">
+        <DialogPanel className="w-full max-w-4xl bg-gray-800 p-4 rounded-md shadow-lg text-center">
+          <DialogTitle className="text-3xl mb-2 text-white">
+            Enter Games
+          </DialogTitle>
+          <div className="grid grid-cols-1">
+            {localGameData.map((game, index) => (
+              <div key={index} className="flex justify-center space-x-2 mb-2">
+                <Button
+                  onClick={() =>
+                    handleGameDataUpdate(index, selectedEntrant.id)
+                  }
+                  disabled={
+                    (index > 0 && !localGameData[index - 1].winnerId) ||
+                    canSubmit
+                  }
+                  className={`m-1 px-4 py-2 w-full max-w-xs text-lg border rounded-md ${
+                    game.winnerId === selectedEntrant.id
+                      ? "bg-emerald-950 border-emerald-700 text-white"
+                      : "bg-gray-950 border-gray-700 text-white"
+                  } ${
+                    (index > 0 && !localGameData[index - 1].winnerId) ||
+                    canSubmit
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  } data-[hover]:bg-emerald-800 data-[active]:bg-emerald-700`}
+                >
+                  Win
+                </Button>
+                <Button
+                  onClick={() =>
+                    handleGameDataUpdate(index, selectedSet.opponent.id)
+                  }
+                  disabled={
+                    (index > 0 && !localGameData[index - 1].winnerId) ||
+                    canSubmit
+                  }
+                  className={`m-1 px-4 py-2 w-full max-w-xs text-lg border rounded-md ${
+                    game.winnerId === selectedSet.opponent.id
+                      ? "bg-rose-950 border-rose-700 text-white"
+                      : "bg-gray-950 border-gray-700 text-white"
+                  } ${
+                    (index > 0 && !localGameData[index - 1].winnerId) ||
+                    canSubmit
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  } data-[hover]:bg-rose-800 data-[active]:bg-rose-700`}
+                >
+                  Lose
+                </Button>
+              </div>
+            ))}
           </div>
-        ))}
+          <div className="flex justify-center space-x-4 mt-4">
+            {canSubmit && (
+              <Button
+                onClick={() => {
+                  onSubmit(localGameData);
+                  setIsOpen(false);
+                }}
+                className="w-full px-4 py-2 text-lg border rounded-md bg-emerald-950 border-emerald-700 text-white data-[hover]:bg-emerald-800 data-[active]:bg-emerald-700"
+              >
+                Submit
+              </Button>
+            )}
+            <Button
+              onClick={() => {
+                onBack();
+                setIsOpen(false);
+              }}
+              className="w-full px-4 py-2 text-lg border rounded-md bg-rose-950 border-rose-700 text-white data-[hover]:bg-rose-800 data-[active]:bg-rose-700"
+            >
+              Back
+            </Button>
+          </div>
+        </DialogPanel>
       </div>
-      {canSubmit && (
-        <button
-          onClick={() => onSubmit(localGameData)}
-          className="m-4 px-8 py-4 border-4 rounded-md text-2xl bg-emerald-950 border-emerald-700 text-white"
-        >
-          Submit
-        </button>
-      )}
-      <button
-        onClick={onBack}
-        className="m-4 px-8 py-4 border-4 rounded-md text-2xl bg-rose-950 border-rose-700 text-white"
-      >
-        Back
-      </button>
-    </div>
+    </Dialog>
   );
 }

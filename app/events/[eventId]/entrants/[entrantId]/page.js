@@ -91,7 +91,7 @@ export default function EntrantSetsPage() {
                   </span>
                 </div>
                 <div
-                  className={`p-4 w-full text-center rounded-md cursor-pointer border-2 ${entrantClass}`}
+                  className={`p-4 w-full text-center rounded-md cursor-pointer border ${entrantClass}`}
                 >
                   <p>{entrantName}</p>
                 </div>
@@ -100,7 +100,7 @@ export default function EntrantSetsPage() {
                     queryClient.prefetchQuery(getOptions(eventId, opponent.id));
                   }}
                   onClick={() => handleClick(opponent.id)}
-                  className={`p-4 w-full text-center rounded-md cursor-pointer border-2 hover:opacity-80 ${opponentClass}`}
+                  className={`p-4 w-full text-center rounded-md cursor-pointer border hover:opacity-80 ${opponentClass}`}
                 >
                   <p>{opponent.name}</p>
                 </div>
