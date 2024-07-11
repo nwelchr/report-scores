@@ -12,6 +12,7 @@ import {
 import SelectEntrant from "./steps/SelectEntrant";
 import OpponentConfirmation from "./steps/OpponentConfirmation";
 import OpponentSelection from "./steps/OpponentSelection";
+import BestOf from "./steps/BestOf";
 import ScoreInput from "./steps/ScoreInput";
 import SubmissionConfirmation from "./steps/SubmissionConfirmation";
 
@@ -27,18 +28,11 @@ const fetchSets = async (eventId, entrantId) => {
   return data.sets;
 };
 
-const reportSet = async ({
-  eventId,
-  setId,
-  winnerId,
-  entrantScore,
-  opponentScore,
-}) => {
+const reportSet = async ({ eventId, setId, winnerId, gameData }) => {
   const response = await axios.post(`/api/events/${eventId}/report`, {
     setId,
     winnerId,
-    entrantScore,
-    opponentScore,
+    gameData,
   });
   return response.data;
 };
@@ -49,8 +43,7 @@ export default function ReportPage() {
   const [selectedEntrant, setSelectedEntrant] = useState(null);
   const [selectedSet, setSelectedSet] = useState(null);
   const [filteredSets, setFilteredSets] = useState([]);
-  const [entrantScore, setEntrantScore] = useState(null);
-  const [opponentScore, setOpponentScore] = useState(null);
+  const [gameData, setGameData] = useState([]);
   const [value, setValue] = useState("");
   const [shouldFetchSets, setShouldFetchSets] = useState(true);
 
@@ -70,8 +63,8 @@ export default function ReportPage() {
     onSuccess: () => {
       console.log("Set reported successfully");
       removeFromLocalStorage("reportState");
-      setStep(5);
-      setShouldFetchSets(false); // Disable fetching sets after reporting, TODO make this work better
+      setStep(6);
+      setShouldFetchSets(false);
     },
   });
 
@@ -81,8 +74,7 @@ export default function ReportPage() {
       setStep(savedState.step);
       setSelectedEntrant(savedState.selectedEntrant);
       setSelectedSet(savedState.selectedSet);
-      setEntrantScore(savedState.entrantScore);
-      setOpponentScore(savedState.opponentScore);
+      setGameData(savedState.gameData);
       setValue(savedState.value);
     }
   }, []);
@@ -93,19 +85,10 @@ export default function ReportPage() {
       selectedEntrant,
       selectedSet,
       filteredSets,
-      entrantScore,
-      opponentScore,
+      gameData,
       value,
     });
-  }, [
-    step,
-    selectedEntrant,
-    selectedSet,
-    filteredSets,
-    entrantScore,
-    opponentScore,
-    value,
-  ]);
+  }, [step, selectedEntrant, selectedSet, filteredSets, gameData, value]);
 
   useEffect(() => {
     if (sets && sets.length) {
@@ -135,14 +118,22 @@ export default function ReportPage() {
     setStep(4);
   };
 
+  const handleGameDataUpdate = (gameIndex, winnerId) => {
+    const newGameData = [...gameData];
+    newGameData[gameIndex] = { winnerId, gameNum: gameIndex + 1 };
+    setGameData(newGameData);
+  };
+
   const handleSubmit = () => {
-    if (selectedSet && entrantScore !== null && opponentScore !== null) {
+    if (selectedSet && gameData.length) {
       const winnerId =
-        entrantScore > opponentScore
+        gameData.filter((game) => game.winnerId === selectedEntrant.id).length >
+        gameData.filter((game) => game.winnerId === selectedSet.opponent.id)
+          .length
           ? selectedEntrant.id
           : selectedSet.opponent.id;
       const setId = selectedSet.id;
-      mutate({ eventId, setId, winnerId, entrantScore, opponentScore });
+      mutate({ eventId, setId, winnerId, gameData });
     }
   };
 
@@ -185,18 +176,25 @@ export default function ReportPage() {
         );
       case 4:
         return (
+          <BestOf
+            onSelect={(bestOf) => {
+              setGameData(Array(bestOf).fill({}));
+              setStep(5);
+            }}
+          />
+        );
+      case 5:
+        return (
           <ScoreInput
             selectedEntrant={selectedEntrant}
             selectedSet={selectedSet}
-            entrantScore={entrantScore}
-            setEntrantScore={setEntrantScore}
-            opponentScore={opponentScore}
-            setOpponentScore={setOpponentScore}
+            gameData={gameData}
+            onGameDataUpdate={handleGameDataUpdate}
             onSubmit={handleSubmit}
             onBack={handleBack}
           />
         );
-      case 5:
+      case 6:
         return <SubmissionConfirmation />;
       default:
         return null;

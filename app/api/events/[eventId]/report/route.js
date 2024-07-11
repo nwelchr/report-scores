@@ -2,15 +2,9 @@ import reportSet from "@/app/queries/reportSet";
 
 export async function POST(req, { params }) {
   const { eventId } = params;
-  const { setId, winnerId, entrantScore, opponentScore } = await req.json();
+  const { setId, winnerId, gameData } = await req.json();
 
-  if (
-    !eventId ||
-    !setId ||
-    !winnerId ||
-    entrantScore === undefined ||
-    opponentScore === undefined
-  ) {
+  if (!eventId || !setId || !winnerId || !gameData) {
     return new Response(
       JSON.stringify({ error: "Missing required parameters" }),
       {
@@ -23,8 +17,7 @@ export async function POST(req, { params }) {
     const result = await reportSet({
       setId,
       winnerId,
-      entrantScore,
-      opponentScore,
+      gameData,
     });
 
     return new Response(JSON.stringify(result), { status: 200 });

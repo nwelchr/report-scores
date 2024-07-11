@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const reportSet = async ({ setId, winnerId, entrantScore, opponentScore }) => {
+const reportSet = async ({ setId, winnerId, gameData }) => {
   const response = await axios.post(
     "https://api.smash.gg/gql/alpha",
     {
       query: `
-        mutation reportSet($setId: ID!, $winnerId: ID!) {
-          reportBracketSet(setId: $setId, winnerId: $winnerId) {
+        mutation reportSet($setId: ID!, $winnerId: ID!, $gameData: [BracketSetGameDataInput]) {
+          reportBracketSet(setId: $setId, winnerId: $winnerId, gameData: $gameData) {
             id
             state
           }
@@ -15,6 +15,7 @@ const reportSet = async ({ setId, winnerId, entrantScore, opponentScore }) => {
       variables: {
         setId,
         winnerId,
+        gameData,
       },
     },
     {
@@ -23,6 +24,8 @@ const reportSet = async ({ setId, winnerId, entrantScore, opponentScore }) => {
       },
     }
   );
+
+  console.log(JSON.stringify(response.data));
 
   return response.data.data;
 };
