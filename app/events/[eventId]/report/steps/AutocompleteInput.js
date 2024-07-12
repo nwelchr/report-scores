@@ -20,7 +20,7 @@ const AutocompleteInput = ({ value, onChange, onSelect, suggestions }) => {
   return (
     <div className="relative">
       <input
-        className="p-2 border rounded-md bg-violet-950 border-violet-700 text-white w-full mb-4 text-4xl text-center"
+        className="p-2 border rounded-md bg-gray-950 border-gray-700 text-white w-full mb-4 text-4xl text-center"
         value={query}
         onChange={handleChange}
       />

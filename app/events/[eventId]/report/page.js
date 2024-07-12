@@ -15,6 +15,7 @@ import OpponentSelection from "./steps/OpponentSelection";
 import BestOf from "./steps/BestOf";
 import ScoreInput from "./steps/ScoreInput";
 import SubmissionConfirmation from "./steps/SubmissionConfirmation";
+import { Dialog, DialogPanel } from "@headlessui/react";
 
 const fetchEntrants = async (eventId) => {
   const { data } = await axios.get(`/api/events/${eventId}/entrants`);
@@ -46,6 +47,7 @@ export default function ReportPage() {
   const [gameData, setGameData] = useState([]);
   const [value, setValue] = useState("");
   const [shouldFetchSets, setShouldFetchSets] = useState(true);
+  const [isOpen, setIsOpen] = useState(true);
 
   const { data: entrants } = useQuery({
     queryKey: ["entrants", eventId],
@@ -114,6 +116,7 @@ export default function ReportPage() {
   };
 
   const handleSetSelect = (set) => {
+    console.log("hello?");
     setSelectedSet(set);
     setStep(4);
   };
@@ -196,9 +199,26 @@ export default function ReportPage() {
     }
   };
 
+  console.log({ step });
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8 flex flex-col justify-center items-center">
-      {renderStep()}
-    </div>
+    <Dialog
+      open={isOpen}
+      onClose={() => setIsOpen(false)}
+      className="relative z-50"
+    >
+      <div className="fixed inset-0 bg-black bg-opacity-50"></div>
+      <div className="fixed inset-0 flex items-center justify-center p-4">
+        <DialogPanel
+          className="w-full max-w-md min-h-64 p-6 border border-gray-800 rounded-md shadow-lg text-center flex flex-col justify-center relative"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0) 90%)",
+          }}
+        >
+          {renderStep()}
+        </DialogPanel>
+      </div>
+    </Dialog>
   );
 }
