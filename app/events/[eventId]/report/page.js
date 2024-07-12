@@ -3,76 +3,15 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import {
   getFromLocalStorage,
   removeFromLocalStorage,
   saveToLocalStorage,
-} from "./utils";
-import { ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
-import useStepNavigation from "./useStepNavigation";
-import SelectEntrant from "./steps/SelectEntrant";
-import OpponentConfirmation from "./steps/OpponentConfirmation";
-import OpponentSelection from "./steps/OpponentSelection";
-import BestOf from "./steps/BestOf";
-import ScoreInput from "./steps/ScoreInput";
-import SubmissionConfirmation from "./steps/SubmissionConfirmation";
-
-const fetchEntrants = async (eventId) => {
-  const { data } = await axios.get(`/api/events/${eventId}/entrants`);
-  return data;
-};
-
-const fetchSets = async (eventId, entrantId) => {
-  const { data } = await axios.get(
-    `/api/events/${eventId}/entrants/${entrantId}/sets`
-  );
-  return data.sets;
-};
-
-const reportSet = async ({ eventId, setId, winnerId, gameData }) => {
-  const response = await axios.post(`/api/events/${eventId}/report`, {
-    setId,
-    winnerId,
-    gameData,
-  });
-  return response.data;
-};
-
-const stepsGraph = {
-  selectEntrant: {
-    component: SelectEntrant,
-    next: ["confirmOpponent"],
-    prev: [],
-  },
-  confirmOpponent: {
-    component: OpponentConfirmation,
-    next: ["selectOpponent", "bestOf"],
-    nextCondition: (state) =>
-      state.filteredSets.length > 1 ? "selectOpponent" : "bestOf",
-    prev: ["selectEntrant"],
-  },
-  selectOpponent: {
-    component: OpponentSelection,
-    next: ["bestOf"],
-    prev: ["confirmOpponent"],
-  },
-  bestOf: {
-    component: BestOf,
-    next: ["scoreInput"],
-    prev: ["confirmOpponent", "selectOpponent"],
-  },
-  scoreInput: {
-    component: ScoreInput,
-    next: ["submissionConfirmation"],
-    prev: ["bestOf"],
-  },
-  submissionConfirmation: {
-    component: SubmissionConfirmation,
-    next: [],
-    prev: ["scoreInput"],
-  },
-};
+} from "./utils/localStorage";
+import stepsGraph from "./utils/stepsGraph";
+import { fetchEntrants, fetchSets, reportSet } from "./utils/api";
+import useStepNavigation from "./utils/useStepNavigation";
+import PageWrapper from "./components/PageWrapper";
 
 export default function ReportPage() {
   const { eventId } = useParams();
@@ -103,7 +42,7 @@ export default function ReportPage() {
     onSuccess: () => {
       console.log("Set reported successfully");
       removeFromLocalStorage("reportState");
-      goToNextStep(); // Move to the next step
+      goToNextStep({ filteredSets }); // Move to the next step based on filteredSets
       setShouldFetchSets(false);
     },
   });
@@ -115,7 +54,6 @@ export default function ReportPage() {
       setSelectedSet(savedState.selectedSet);
       setGameData(savedState.gameData);
       setValue(savedState.value);
-      goToNextStep(savedState); // Move to the saved step
     }
   }, []);
 
@@ -146,19 +84,18 @@ export default function ReportPage() {
       if (inProgressOrNotStarted.length > 1) {
         console.warn("More than one set in progress for this user.");
       }
-      goToNextStep({ filteredSets: inProgressOrNotStarted }); // Move to the next step based on filteredSets
     }
   }, [sets]);
 
   const handleEntrantSelect = (suggestion) => {
     setSelectedEntrant(suggestion);
     setValue(suggestion.name);
-    goToNextStep(); // Move to the next step
+    goToNextStep({ filteredSets }); // Move to the next step
   };
 
   const handleSetSelect = (set) => {
     setSelectedSet(set);
-    goToNextStep(); // Move to the next step
+    goToNextStep({ filteredSets }); // Move to the next step
   };
 
   const handleSubmit = (localGameData) => {
@@ -177,36 +114,25 @@ export default function ReportPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900">
-      <header className="w-full p-4 bg-gray-900 flex items-center">
-        {stepsGraph[currentStep].prev.length > 0 && (
-          <button onClick={goBack} className="text-white hover:text-gray-400">
-            <ArrowUturnLeftIcon className="w-8 h-8" />
-          </button>
-        )}
-      </header>
-      <main
-        className="w-full h-screen max-w-md p-6 border-gray-800 rounded-md text-center flex flex-col justify-center relative"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0) 40%)",
-        }}
-      >
-        {renderStep({
-          value,
-          entrants,
-          filteredSets,
-          selectedEntrant,
-          selectedSet,
-          gameData,
-          onChange: setValue,
-          onSelect: handleEntrantSelect,
-          onSubmit: handleSubmit,
-          onBack: goBack,
-          onNo: () => goToNextStep({ filteredSets }),
-          onSelectSet: handleSetSelect,
-        })}
-      </main>
-    </div>
+    <PageWrapper
+      currentStep={currentStep}
+      goBack={goBack}
+      stepsGraph={stepsGraph}
+    >
+      {renderStep({
+        value,
+        entrants,
+        filteredSets,
+        selectedEntrant,
+        selectedSet,
+        gameData,
+        onChange: setValue,
+        onSelect: handleEntrantSelect,
+        onSubmit: handleSubmit,
+        onBack: goBack,
+        onNo: () => goToNextStep({ filteredSets }), // Ensure this transitions to selectOpponent
+        onSelectSet: handleSetSelect,
+      })}
+    </PageWrapper>
   );
 }

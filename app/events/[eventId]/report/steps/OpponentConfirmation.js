@@ -16,7 +16,7 @@ export default function OpponentConfirmation({ filteredSets, onSelect, onNo }) {
             <Button onClick={() => onSelect(filteredSets[0])} color="teal">
               Yes
             </Button>
-            <Button onClick={() => onNo()} color="fuchsia">
+            <Button onClick={onNo} color="fuchsia">
               No
             </Button>
           </div>

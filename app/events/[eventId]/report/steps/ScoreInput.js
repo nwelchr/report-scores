@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Title, Description } from "../components/Text";
 import Button from "../components/Button";
 
@@ -9,9 +9,14 @@ export default function ScoreInput({
   onSubmit,
   onBack,
 }) {
-  const [localGameData, setLocalGameData] = useState(
-    gameData.map((_, index) => ({ gameNum: index + 1 }))
-  );
+  const [localGameData, setLocalGameData] = useState([]);
+
+  useEffect(() => {
+    if (gameData.length > 0) {
+      setLocalGameData(gameData);
+    }
+  }, [gameData]);
+
   const gameCount = localGameData.length;
   const [entrantWins, setEntrantWins] = useState(0);
   const [opponentWins, setOpponentWins] = useState(0);
@@ -86,6 +91,9 @@ export default function ScoreInput({
             Submit
           </Button>
         )}
+        <Button onClick={onBack} color="gray">
+          Back
+        </Button>
       </div>
     </>
   );
