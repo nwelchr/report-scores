@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
-import { DialogTitle, Description, Button } from "@headlessui/react";
+import { Title, Description } from "../components/Text";
+import Button from "../components/Button";
 
 export default function ScoreInput({
   selectedEntrant,
@@ -26,7 +27,6 @@ export default function ScoreInput({
     const newGameData = localGameData.slice(0, index + 1);
     newGameData[index] = { winnerId, gameNum: index + 1 };
 
-    // Reset future game data
     for (let i = index + 1; i < gameCount; i++) {
       newGameData[i] = { gameNum: i + 1 };
     }
@@ -46,12 +46,8 @@ export default function ScoreInput({
 
   return (
     <>
-      <DialogTitle className="text-3xl mb-2 text-white">
-        Enter Games
-      </DialogTitle>
-      <Description className="mt-2 mb-4 text-gray-300">
-        For each game, did you win or lose?
-      </Description>
+      <Title>Enter Games</Title>
+      <Description>For each game, did you win or lose?</Description>
       <div className="grid grid-cols-1">
         {localGameData.map((game, index) => (
           <div key={index} className="flex justify-center space-x-2 mb-2">
@@ -60,15 +56,7 @@ export default function ScoreInput({
               disabled={
                 (index > 0 && !localGameData[index - 1].winnerId) || canSubmit
               }
-              className={`m-1 px-4 py-2 w-full max-w-xs text-lg border rounded-md ${
-                game.winnerId === selectedEntrant.id
-                  ? "bg-teal-950 border-teal-700 text-white"
-                  : "bg-gray-950 border-gray-700 text-white"
-              } ${
-                (index > 0 && !localGameData[index - 1].winnerId) || canSubmit
-                  ? "opacity-50 cursor-not-allowed"
-                  : ""
-              } data-[hover]:bg-teal-800 data-[active]:bg-teal-700`}
+              color={game.winnerId === selectedEntrant.id ? "teal" : "gray"}
             >
               Win
             </Button>
@@ -79,15 +67,9 @@ export default function ScoreInput({
               disabled={
                 (index > 0 && !localGameData[index - 1].winnerId) || canSubmit
               }
-              className={`m-1 px-4 py-2 w-full max-w-xs text-lg border rounded-md ${
-                game.winnerId === selectedSet.opponent.id
-                  ? "bg-fuchsia-950 border-fuchsia-700 text-white"
-                  : "bg-gray-950 border-gray-700 text-white"
-              } ${
-                (index > 0 && !localGameData[index - 1].winnerId) || canSubmit
-                  ? "opacity-50 cursor-not-allowed"
-                  : ""
-              } data-[hover]:bg-fuchsia-800 data-[active]:bg-fuchsia-700`}
+              color={
+                game.winnerId === selectedSet.opponent.id ? "fuchsia" : "gray"
+              }
             >
               Lose
             </Button>
@@ -98,17 +80,12 @@ export default function ScoreInput({
         {canSubmit && (
           <Button
             onClick={() => onSubmit(localGameData)}
-            className="w-full max-w-sm px-4 py-2 text-lg border rounded-md bg-violet-950 border-violet-700 text-white data-[hover]:bg-violet-800 data-[active]:bg-violet-700"
+            isFullWidth
+            color="violet"
           >
             Submit
           </Button>
         )}
-        <Button
-          onClick={onBack}
-          className="w-full max-w-sm px-4 py-2 text-lg border rounded-md bg-fuchsia-950 border-fuchsia-700 text-white data-[hover]:bg-fuchsia-800 data-[active]:bg-fuchsia-700"
-        >
-          Back
-        </Button>
       </div>
     </>
   );

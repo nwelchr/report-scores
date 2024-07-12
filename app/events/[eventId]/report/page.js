@@ -5,17 +5,18 @@ import { useParams } from "next/navigation";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import {
-  saveToLocalStorage,
   getFromLocalStorage,
   removeFromLocalStorage,
+  saveToLocalStorage,
 } from "./utils";
+import { ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
+import useStepNavigation from "./useStepNavigation";
 import SelectEntrant from "./steps/SelectEntrant";
 import OpponentConfirmation from "./steps/OpponentConfirmation";
 import OpponentSelection from "./steps/OpponentSelection";
 import BestOf from "./steps/BestOf";
 import ScoreInput from "./steps/ScoreInput";
 import SubmissionConfirmation from "./steps/SubmissionConfirmation";
-import { Dialog, DialogPanel } from "@headlessui/react";
 
 const fetchEntrants = async (eventId) => {
   const { data } = await axios.get(`/api/events/${eventId}/entrants`);
@@ -38,16 +39,53 @@ const reportSet = async ({ eventId, setId, winnerId, gameData }) => {
   return response.data;
 };
 
+const stepsGraph = {
+  selectEntrant: {
+    component: SelectEntrant,
+    next: ["confirmOpponent"],
+    prev: [],
+  },
+  confirmOpponent: {
+    component: OpponentConfirmation,
+    next: ["selectOpponent", "bestOf"],
+    nextCondition: (state) =>
+      state.filteredSets.length > 1 ? "selectOpponent" : "bestOf",
+    prev: ["selectEntrant"],
+  },
+  selectOpponent: {
+    component: OpponentSelection,
+    next: ["bestOf"],
+    prev: ["confirmOpponent"],
+  },
+  bestOf: {
+    component: BestOf,
+    next: ["scoreInput"],
+    prev: ["confirmOpponent", "selectOpponent"],
+  },
+  scoreInput: {
+    component: ScoreInput,
+    next: ["submissionConfirmation"],
+    prev: ["bestOf"],
+  },
+  submissionConfirmation: {
+    component: SubmissionConfirmation,
+    next: [],
+    prev: ["scoreInput"],
+  },
+};
+
 export default function ReportPage() {
   const { eventId } = useParams();
-  const [step, setStep] = useState(1);
+  const { currentStep, goToNextStep, goBack, renderStep } = useStepNavigation(
+    "selectEntrant",
+    stepsGraph
+  );
   const [selectedEntrant, setSelectedEntrant] = useState(null);
   const [selectedSet, setSelectedSet] = useState(null);
   const [filteredSets, setFilteredSets] = useState([]);
   const [gameData, setGameData] = useState([]);
   const [value, setValue] = useState("");
   const [shouldFetchSets, setShouldFetchSets] = useState(true);
-  const [isOpen, setIsOpen] = useState(true);
 
   const { data: entrants } = useQuery({
     queryKey: ["entrants", eventId],
@@ -65,7 +103,7 @@ export default function ReportPage() {
     onSuccess: () => {
       console.log("Set reported successfully");
       removeFromLocalStorage("reportState");
-      setStep(6);
+      goToNextStep(); // Move to the next step
       setShouldFetchSets(false);
     },
   });
@@ -73,24 +111,31 @@ export default function ReportPage() {
   useEffect(() => {
     const savedState = getFromLocalStorage("reportState");
     if (savedState) {
-      setStep(savedState.step);
       setSelectedEntrant(savedState.selectedEntrant);
       setSelectedSet(savedState.selectedSet);
       setGameData(savedState.gameData);
       setValue(savedState.value);
+      goToNextStep(savedState); // Move to the saved step
     }
   }, []);
 
   useEffect(() => {
     saveToLocalStorage("reportState", {
-      step,
+      step: currentStep,
       selectedEntrant,
       selectedSet,
       filteredSets,
       gameData,
       value,
     });
-  }, [step, selectedEntrant, selectedSet, filteredSets, gameData, value]);
+  }, [
+    currentStep,
+    selectedEntrant,
+    selectedSet,
+    filteredSets,
+    gameData,
+    value,
+  ]);
 
   useEffect(() => {
     if (sets && sets.length) {
@@ -101,24 +146,19 @@ export default function ReportPage() {
       if (inProgressOrNotStarted.length > 1) {
         console.warn("More than one set in progress for this user.");
       }
-      if (inProgressOrNotStarted.length === 1) {
-        setStep(2);
-      } else {
-        setStep(3);
-      }
+      goToNextStep({ filteredSets: inProgressOrNotStarted }); // Move to the next step based on filteredSets
     }
   }, [sets]);
 
   const handleEntrantSelect = (suggestion) => {
     setSelectedEntrant(suggestion);
     setValue(suggestion.name);
-    setStep(2);
+    goToNextStep(); // Move to the next step
   };
 
   const handleSetSelect = (set) => {
-    console.log("hello?");
     setSelectedSet(set);
-    setStep(4);
+    goToNextStep(); // Move to the next step
   };
 
   const handleSubmit = (localGameData) => {
@@ -136,89 +176,37 @@ export default function ReportPage() {
     }
   };
 
-  const handleBack = () => {
-    if (step === 4 && filteredSets.length === 1) {
-      setStep(2);
-    } else if (step === 4) {
-      setStep(3);
-    } else {
-      setStep(step - 1);
-    }
-  };
-
-  const renderStep = () => {
-    switch (step) {
-      case 1:
-        return (
-          <SelectEntrant
-            value={value}
-            entrants={entrants}
-            onChange={setValue}
-            onSelect={handleEntrantSelect}
-          />
-        );
-      case 2:
-        return (
-          <OpponentConfirmation
-            filteredSets={filteredSets}
-            onSelect={handleSetSelect}
-            onNo={() => setStep(3)}
-          />
-        );
-      case 3:
-        return (
-          <OpponentSelection
-            sets={sets}
-            onSelect={handleSetSelect}
-            onBack={handleBack}
-          />
-        );
-      case 4:
-        return (
-          <BestOf
-            onSelect={(bestOf) => {
-              setGameData(Array(bestOf).fill({ gameNum: 1 }));
-              setStep(5);
-            }}
-          />
-        );
-      case 5:
-        return (
-          <ScoreInput
-            selectedEntrant={selectedEntrant}
-            selectedSet={selectedSet}
-            gameData={gameData}
-            onSubmit={handleSubmit}
-            onBack={handleBack}
-          />
-        );
-      case 6:
-        return <SubmissionConfirmation />;
-      default:
-        return null;
-    }
-  };
-
-  console.log({ step });
-
   return (
-    <Dialog
-      open={isOpen}
-      onClose={() => setIsOpen(false)}
-      className="relative z-50"
-    >
-      <div className="fixed inset-0 bg-black bg-opacity-50"></div>
-      <div className="fixed inset-0 flex items-center justify-center p-4">
-        <DialogPanel
-          className="w-full max-w-md min-h-64 p-6 border border-gray-800 rounded-md shadow-lg text-center flex flex-col justify-center relative"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0) 90%)",
-          }}
-        >
-          {renderStep()}
-        </DialogPanel>
-      </div>
-    </Dialog>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900">
+      <header className="w-full p-4 bg-gray-900 flex items-center">
+        {stepsGraph[currentStep].prev.length > 0 && (
+          <button onClick={goBack} className="text-white hover:text-gray-400">
+            <ArrowUturnLeftIcon className="w-8 h-8" />
+          </button>
+        )}
+      </header>
+      <main
+        className="w-full h-screen max-w-md p-6 border-gray-800 rounded-md text-center flex flex-col justify-center relative"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0) 40%)",
+        }}
+      >
+        {renderStep({
+          value,
+          entrants,
+          filteredSets,
+          selectedEntrant,
+          selectedSet,
+          gameData,
+          onChange: setValue,
+          onSelect: handleEntrantSelect,
+          onSubmit: handleSubmit,
+          onBack: goBack,
+          onNo: () => goToNextStep({ filteredSets }),
+          onSelectSet: handleSetSelect,
+        })}
+      </main>
+    </div>
   );
 }
