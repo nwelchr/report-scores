@@ -25,13 +25,13 @@ export default function BestOf({ onSelect }) {
           <Description className="mt-2 text-gray-300">
             Please select the number of games.
           </Description>
-          <div className="mt-4 flex flex-col items-center space-y-4">
+          <div className="mt-4 flex justify-center">
             <Button
               onClick={() => {
                 onSelect(3);
                 setIsOpen(false);
               }}
-              className="text-xl m-2 px-6 py-4 w-full max-w-sm border rounded-md bg-gray-950 border-gray-700 text-white data-[hover]:bg-gray-800 data-[active]:bg-gray-700"
+              className="text-xl m-2 px-8 py-4 border rounded-md bg-gray-950 border-gray-700 text-white data-[hover]:bg-gray-800 data-[active]:bg-gray-700"
             >
               3
             </Button>
@@ -40,7 +40,7 @@ export default function BestOf({ onSelect }) {
                 onSelect(5);
                 setIsOpen(false);
               }}
-              className="text-xl m-2 px-6 py-4 w-full max-w-sm border rounded-md bg-gray-950 border-gray-700 text-white data-[hover]:bg-gray-800 data-[active]:bg-gray-700"
+              className="text-xl m-2 px-8 py-4 border rounded-md bg-gray-950 border-gray-700 text-white data-[hover]:bg-gray-800 data-[active]:bg-gray-700"
             >
               5
             </Button>

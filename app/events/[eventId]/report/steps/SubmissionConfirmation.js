@@ -17,7 +17,7 @@ export default function SubmissionConfirmation() {
     >
       <div className="fixed inset-0 bg-black bg-opacity-50"></div>
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <DialogPanel className="w-full max-w-md bg-gray-800 p-6 rounded-md shadow-lg text-center">
+        <DialogPanel className="w-full max-w-md min-h-64 bg-gray-800 p-6 rounded-md shadow-lg text-center flex flex-col justify-center">
           <DialogTitle className="text-2xl text-white">
             Score Submitted!
           </DialogTitle>

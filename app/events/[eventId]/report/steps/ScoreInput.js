@@ -63,6 +63,9 @@ export default function ScoreInput({
           <DialogTitle className="text-3xl mb-2 text-white">
             Enter Games
           </DialogTitle>
+          <Description className="mt-2 mb-4 text-gray-300">
+            For each game, did you win or lose?
+          </Description>
           <div className="grid grid-cols-1">
             {localGameData.map((game, index) => (
               <div key={index} className="flex justify-center space-x-2 mb-2">

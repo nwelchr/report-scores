@@ -23,7 +23,6 @@ const AutocompleteInput = ({ value, onChange, onSelect, suggestions }) => {
         className="p-2 border rounded-md bg-violet-950 border-violet-700 text-white w-full mb-4 text-4xl text-center"
         value={query}
         onChange={handleChange}
-        placeholder="Enter tag"
       />
       {query && filteredSuggestions.length > 0 && (
         <ul className="absolute mt-1 w-full z-10 max-h-32 overflow-y-auto">
