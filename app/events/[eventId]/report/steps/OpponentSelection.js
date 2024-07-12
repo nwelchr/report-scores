@@ -17,7 +17,10 @@ export default function OpponentSelection({ sets, onSelect, onBack }) {
     >
       <div className="fixed inset-0 bg-black bg-opacity-50"></div>
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <DialogPanel className="w-full max-w-4xl bg-gray-800 p-6 rounded-md shadow-lg text-center">
+        <DialogPanel className="w-full max-w-md min-h-64 bg-black p-6 border border-gray-800 rounded-md shadow-lg text-center flex flex-col justify-center relative">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-48 h-48 bg-white opacity-20 rounded-full blur-3xl"></div>
+          </div>
           <DialogTitle className="text-3xl mb-4 text-white">
             Select Opponent
           </DialogTitle>
@@ -53,7 +56,7 @@ export default function OpponentSelection({ sets, onSelect, onBack }) {
                 onBack();
                 setIsOpen(false);
               }}
-              className="px-4 py-2 w-full max-w-sm text-lg border rounded-md bg-rose-950 border-rose-700 text-white data-[hover]:bg-rose-800 data-[active]:bg-rose-700"
+              className="px-4 py-2 w-full max-w-sm text-lg border rounded-md bg-slate-950 border-slate-700 text-white data-[hover]:bg-slate-800 data-[active]:bg-slate-700"
             >
               Back
             </Button>

@@ -34,7 +34,10 @@ export default function OpponentConfirmation({ filteredSets, onSelect, onNo }) {
         >
           <div className="fixed inset-0 bg-black bg-opacity-50"></div>
           <div className="fixed inset-0 flex items-center justify-center p-4">
-            <DialogPanel className="w-full max-w-md min-h-64 bg-gray-800 p-6 rounded-md shadow-lg text-center flex flex-col justify-center">
+            <DialogPanel className="w-full max-w-md min-h-64 bg-black p-6 border border-gray-800 rounded-md shadow-lg text-center flex flex-col justify-center relative">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-48 h-48 bg-white opacity-20 rounded-full blur-3xl"></div>
+              </div>
               {filteredSets[0].opponent.id ? (
                 <>
                   <DialogTitle className="text-2xl text-white">
@@ -49,7 +52,7 @@ export default function OpponentConfirmation({ filteredSets, onSelect, onNo }) {
                         onSelect(filteredSets[0]);
                         setIsOpen(false);
                       }}
-                      className="text-xl m-2 px-6 py-4 border rounded-md bg-emerald-950 border-emerald-700 text-white data-[hover]:bg-emerald-800 data-[active]:bg-emerald-700"
+                      className="text-xl m-2 px-6 py-4 border rounded-md bg-teal-950 border-teal-700 text-white data-[hover]:bg-teal-800 data-[active]:bg-teal-700"
                     >
                       Yes
                     </Button>
@@ -58,7 +61,7 @@ export default function OpponentConfirmation({ filteredSets, onSelect, onNo }) {
                         onNo();
                         setIsOpen(false);
                       }}
-                      className="text-xl m-2 px-6 py-4 border rounded-md bg-rose-950 border-rose-700 text-white data-[hover]:bg-rose-800 data-[active]:bg-rose-700"
+                      className="text-xl m-2 px-6 py-4 border rounded-md bg-fuchsia-950 border-fuchsia-700 text-white data-[hover]:bg-fuchsia-800 data-[active]:bg-fuchsia-700"
                     >
                       No
                     </Button>

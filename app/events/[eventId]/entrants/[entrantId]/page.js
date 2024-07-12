@@ -69,12 +69,12 @@ export default function EntrantSetsPage() {
             if (set.state === "COMPLETE") {
               entrantClass =
                 set.winnerId === parseInt(entrantId)
-                  ? "border-emerald-700 bg-emerald-950"
-                  : "border-rose-700 bg-rose-950";
+                  ? "border-teal-700 bg-teal-950"
+                  : "border-fuchsia-700 bg-fuchsia-950";
               opponentClass =
                 set.winnerId === parseInt(opponent.id)
-                  ? "border-emerald-700 bg-emerald-950"
-                  : "border-rose-700 bg-rose-950";
+                  ? "border-teal-700 bg-teal-950"
+                  : "border-fuchsia-700 bg-fuchsia-950";
             } else {
               entrantClass =
                 set.state === "IN_PROGRESS"

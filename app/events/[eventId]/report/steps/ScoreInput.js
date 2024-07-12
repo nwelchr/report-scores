@@ -59,7 +59,10 @@ export default function ScoreInput({
     >
       <div className="fixed inset-0 bg-black bg-opacity-50"></div>
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <DialogPanel className="w-full max-w-4xl bg-gray-800 p-4 rounded-md shadow-lg text-center">
+        <DialogPanel className="w-full max-w-md min-h-64 bg-black p-6 border border-gray-800 rounded-md shadow-lg text-center flex flex-col justify-center relative">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-48 h-48 bg-white opacity-20 rounded-full blur-3xl"></div>
+          </div>
           <DialogTitle className="text-3xl mb-2 text-white">
             Enter Games
           </DialogTitle>
@@ -79,14 +82,14 @@ export default function ScoreInput({
                   }
                   className={`m-1 px-4 py-2 w-full max-w-xs text-lg border rounded-md ${
                     game.winnerId === selectedEntrant.id
-                      ? "bg-emerald-950 border-emerald-700 text-white"
+                      ? "bg-teal-950 border-teal-700 text-white"
                       : "bg-gray-950 border-gray-700 text-white"
                   } ${
                     (index > 0 && !localGameData[index - 1].winnerId) ||
                     canSubmit
                       ? "opacity-50 cursor-not-allowed"
                       : ""
-                  } data-[hover]:bg-emerald-800 data-[active]:bg-emerald-700`}
+                  } data-[hover]:bg-teal-800 data-[active]:bg-teal-700`}
                 >
                   Win
                 </Button>
@@ -100,14 +103,14 @@ export default function ScoreInput({
                   }
                   className={`m-1 px-4 py-2 w-full max-w-xs text-lg border rounded-md ${
                     game.winnerId === selectedSet.opponent.id
-                      ? "bg-rose-950 border-rose-700 text-white"
+                      ? "bg-fuchsia-950 border-fuchsia-700 text-white"
                       : "bg-gray-950 border-gray-700 text-white"
                   } ${
                     (index > 0 && !localGameData[index - 1].winnerId) ||
                     canSubmit
                       ? "opacity-50 cursor-not-allowed"
                       : ""
-                  } data-[hover]:bg-rose-800 data-[active]:bg-rose-700`}
+                  } data-[hover]:bg-fuchsia-800 data-[active]:bg-fuchsia-700`}
                 >
                   Lose
                 </Button>
@@ -121,7 +124,7 @@ export default function ScoreInput({
                   onSubmit(localGameData);
                   setIsOpen(false);
                 }}
-                className="w-full max-w-sm px-4 py-2 text-lg border rounded-md bg-emerald-950 border-emerald-700 text-white data-[hover]:bg-emerald-800 data-[active]:bg-emerald-700"
+                className="w-full max-w-sm px-4 py-2 text-lg border rounded-md bg-violet-950 border-violet-700 text-white data-[hover]:bg-violet-800 data-[active]:bg-violet-700"
               >
                 Submit
               </Button>
@@ -131,7 +134,7 @@ export default function ScoreInput({
                 onBack();
                 setIsOpen(false);
               }}
-              className="w-full max-w-sm px-4 py-2 text-lg border rounded-md bg-rose-950 border-rose-700 text-white data-[hover]:bg-rose-800 data-[active]:bg-rose-700"
+              className="w-full max-w-sm px-4 py-2 text-lg border rounded-md bg-fuchsia-950 border-fuchsia-700 text-white data-[hover]:bg-fuchsia-800 data-[active]:bg-fuchsia-700"
             >
               Back
             </Button>
