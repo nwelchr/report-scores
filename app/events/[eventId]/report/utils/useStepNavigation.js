@@ -5,10 +5,9 @@ const useStepNavigation = (initialStep, stepsGraph) => {
   const [history, setHistory] = useState([initialStep]);
 
   const goToNextStep = useCallback(
-    (state) => {
-      const nextStep = stepsGraph[currentStep].nextCondition
-        ? stepsGraph[currentStep].nextCondition(state)
-        : stepsGraph[currentStep].next[0];
+    (state, action) => {
+      console.log({ state });
+      const nextStep = stepsGraph[currentStep].decideNextStep(state, action);
       setHistory((prevHistory) => [...prevHistory, nextStep]);
       setCurrentStep(nextStep);
     },
@@ -26,6 +25,7 @@ const useStepNavigation = (initialStep, stepsGraph) => {
 
   const renderStep = useCallback(
     (props) => {
+      console.log({ currentStep });
       const StepComponent = stepsGraph[currentStep].component;
       return <StepComponent {...props} />;
     },

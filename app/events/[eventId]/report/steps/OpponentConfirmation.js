@@ -12,7 +12,7 @@ export default function OpponentConfirmation({ filteredSets, onSelect, onNo }) {
           <Description>
             Is your opponent {filteredSets[0].opponent.name}?
           </Description>
-          <div className="mt-4 flex justify-center">
+          <div className="mt-4 flex justify-center space-x-4">
             <Button onClick={() => onSelect(filteredSets[0])} color="teal">
               Yes
             </Button>

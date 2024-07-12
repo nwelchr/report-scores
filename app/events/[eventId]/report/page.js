@@ -31,11 +31,22 @@ export default function ReportPage() {
     queryFn: () => fetchEntrants(eventId),
   });
 
-  const { data: sets } = useQuery({
+  const { data: sets, isSuccess: setsFetched } = useQuery({
     queryKey: ["sets", selectedEntrant?.id],
     queryFn: () => fetchSets(eventId, selectedEntrant?.id),
     enabled: !!selectedEntrant?.id && shouldFetchSets,
   });
+
+  useEffect(() => {
+    console.log({ sets });
+    if (setsFetched && sets) {
+      const inProgressOrNotStarted = sets.filter(
+        (set) => set.state === "IN_PROGRESS" || set.state === "NOT_STARTED"
+      );
+      setFilteredSets(inProgressOrNotStarted);
+      setShouldFetchSets(false);
+    }
+  }, [sets, setsFetched]);
 
   const { mutate } = useMutation({
     mutationFn: reportSet,
@@ -43,7 +54,6 @@ export default function ReportPage() {
       console.log("Set reported successfully");
       removeFromLocalStorage("reportState");
       goToNextStep({ filteredSets }); // Move to the next step based on filteredSets
-      setShouldFetchSets(false);
     },
   });
 
@@ -75,27 +85,15 @@ export default function ReportPage() {
     value,
   ]);
 
-  useEffect(() => {
-    if (sets && sets.length) {
-      const inProgressOrNotStarted = sets.filter(
-        (set) => set.state === "IN_PROGRESS" || set.state === "NOT_STARTED"
-      );
-      setFilteredSets(inProgressOrNotStarted);
-      if (inProgressOrNotStarted.length > 1) {
-        console.warn("More than one set in progress for this user.");
-      }
-    }
-  }, [sets]);
-
   const handleEntrantSelect = (suggestion) => {
     setSelectedEntrant(suggestion);
     setValue(suggestion.name);
-    goToNextStep({ filteredSets }); // Move to the next step
+    goToNextStep({ filteredSets }); // Ensure filteredSets is passed to decideNextStep
   };
 
   const handleSetSelect = (set) => {
     setSelectedSet(set);
-    goToNextStep({ filteredSets }); // Move to the next step
+    goToNextStep({ filteredSets }); // Ensure filteredSets is passed to decideNextStep
   };
 
   const handleSubmit = (localGameData) => {
@@ -130,7 +128,7 @@ export default function ReportPage() {
         onSelect: handleEntrantSelect,
         onSubmit: handleSubmit,
         onBack: goBack,
-        onNo: () => goToNextStep({ filteredSets }), // Ensure this transitions to selectOpponent
+        onNo: () => goToNextStep({ filteredSets }, "no"), // Ensure this transitions to selectOpponent
         onSelectSet: handleSetSelect,
       })}
     </PageWrapper>
