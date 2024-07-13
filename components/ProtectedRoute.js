@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useReportContext } from "app/context/ReportContext";
+import { useReportContext } from "context/ReportContext";
 
 const ProtectedRoute = (WrappedComponent, requiredState) => {
   return (props) => {

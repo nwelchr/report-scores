@@ -1,4 +1,4 @@
-import fetchEntrantSets from "app/queries/fetchEntrantSets";
+import fetchEntrantSets from "queries/fetchEntrantSets";
 
 const stateMapping = {
   1: "NOT_STARTED",

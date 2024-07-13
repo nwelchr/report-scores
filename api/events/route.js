@@ -1,4 +1,4 @@
-import fetchEvent from "app/queries/fetchEvent";
+import fetchEvent from "queries/fetchEvent";
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);

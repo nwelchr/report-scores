@@ -1,6 +1,6 @@
 import SubmissionConfirmation from "./SubmissionConfirmation";
-import ProtectedRoute from "app/components/ProtectedRoute";
-import PageWrapper from "app/components/PageWrapper";
+import ProtectedRoute from "components/ProtectedRoute";
+import PageWrapper from "components/PageWrapper";
 
 const SubmissionConfirmationPage = () => {
   return (

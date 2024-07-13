@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import ScoreInput from "./ScoreInput";
-import { useReportContext } from "app/context/ReportContext";
-import ProtectedRoute from "app/components/ProtectedRoute";
-import PageWrapper from "app/components/PageWrapper";
+import { useReportContext } from "context/ReportContext";
+import ProtectedRoute from "components/ProtectedRoute";
+import PageWrapper from "components/PageWrapper";
 
 const ScoreInputPage = () => {
   const { state, updateState } = useReportContext();

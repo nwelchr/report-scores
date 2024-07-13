@@ -1,4 +1,4 @@
-import reportSet from "app/queries/reportSet";
+import reportSet from "queries/reportSet";
 
 export async function POST(req, { params }) {
   const { eventId } = params;

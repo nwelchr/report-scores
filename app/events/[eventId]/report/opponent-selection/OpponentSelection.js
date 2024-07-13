@@ -1,6 +1,6 @@
 import React from "react";
-import { Title, Description } from "app/components/Text";
-import Button from "app/components/Button";
+import { Title, Description } from "components/Text";
+import Button from "components/Button";
 
 export default function OpponentSelection({ sets, onSelect, onBack }) {
   const inProgressOrNotStarted =

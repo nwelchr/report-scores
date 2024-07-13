@@ -1,5 +1,5 @@
 import React from "react";
-import { Title } from "app/components/Text";
+import { Title } from "components/Text";
 
 export default function SubmissionConfirmation() {
   return <Title>Score Submitted!</Title>;

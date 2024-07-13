@@ -3,9 +3,9 @@
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import SelectEntrant from "./SelectEntrant";
-import { useReportContext } from "app/context/ReportContext";
-import { fetchEntrants, fetchSets } from "app/utils/api";
-import PageWrapper from "app/components/PageWrapper";
+import { useReportContext } from "context/ReportContext";
+import { fetchEntrants, fetchSets } from "utils/api";
+import PageWrapper from "components/PageWrapper";
 
 const SelectEntrantPage = () => {
   const { state, updateState } = useReportContext();
