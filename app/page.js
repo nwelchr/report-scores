@@ -24,6 +24,8 @@ export default function Page() {
   const [url, setUrl] = useState("");
   const router = useRouter();
 
+  console.log("hello?");
+
   const { data, error, isLoading, isSuccess } = useQuery({
     queryKey: ["event", { slug: extractSlug(url) }],
     queryFn: () => fetchEvent(extractSlug(url), router),

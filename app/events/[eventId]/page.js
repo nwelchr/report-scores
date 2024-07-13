@@ -4,7 +4,7 @@ import React from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import Entrant from "@/app/components/Entrant";
+import Entrant from "app/components/Entrant";
 
 const fetchEntrants = async (eventId) => {
   const { data } = await axios.get(`/api/events/${eventId}/entrants`);
@@ -13,6 +13,8 @@ const fetchEntrants = async (eventId) => {
 
 export default function EventPage() {
   const { eventId } = useParams();
+
+  const router = useRouter();
 
   const {
     data: entrants,

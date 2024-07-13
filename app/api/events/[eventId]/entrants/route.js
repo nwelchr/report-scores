@@ -1,4 +1,4 @@
-import fetchEntrants from "@/app/queries/fetchEntrants";
+import fetchEntrants from "app/queries/fetchEntrants";
 
 export async function GET(req, { params }) {
   const { eventId } = params;

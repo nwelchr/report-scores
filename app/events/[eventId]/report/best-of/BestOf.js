@@ -1,6 +1,6 @@
 import React from "react";
-import { Title, Description } from "../components/Text";
-import Button from "../components/Button";
+import { Title, Description } from "app/components/Text";
+import Button from "app/components/Button";
 
 export default function BestOf({ onSelect }) {
   const handleSelect = (count) => {
