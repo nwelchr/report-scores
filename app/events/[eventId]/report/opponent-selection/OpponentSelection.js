@@ -11,11 +11,10 @@ export default function OpponentSelection({ sets, onSelect }) {
 
   return (
     <>
-      <Title>Select Opponent</Title>
-      <Description>Select an opponent from the list below.</Description>
+      <Title>Select your opponent.</Title>
       <div className="flex flex-col items-center">
         {inProgressOrNotStarted.map((set) => (
-          <div key={set.id} className="w-full max-w-sm mb-4">
+          <div key={set.id} className="w-full max-w-sm">
             <Button isFullWidth onClick={() => onSelect(set)}>
               {set.opponent.name}
               <p className="text-sm text-slate-400 text-center mt-2">
@@ -25,7 +24,7 @@ export default function OpponentSelection({ sets, onSelect }) {
           </div>
         ))}
         {completed.map((set) => (
-          <div key={set.id} className="w-full max-w-sm mb-4">
+          <div key={set.id} className="w-full max-w-sm">
             <Button isFullWidth onClick={() => onSelect(set)}>
               {set.opponent.name}
               <p className="text-sm text-slate-400 text-center mt-2">

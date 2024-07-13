@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import SelectEntrant from "./SelectEntrant";
 import { useReportContext } from "context/ReportContext";
 import { fetchEntrants, fetchSets } from "utils/api";
-import PageWrapper from "components/PageWrapper";
+import ProtectedRoute from "components/ProtectedRoute";
 
 const SelectEntrantPage = () => {
   const { reportState, setReportState } = useReportContext();
@@ -37,11 +37,7 @@ const SelectEntrantPage = () => {
     }
   };
 
-  return (
-    <PageWrapper>
-      <SelectEntrant onSelect={handleEntrantSelect} entrants={entrants} />
-    </PageWrapper>
-  );
+  return <SelectEntrant onSelect={handleEntrantSelect} entrants={entrants} />;
 };
 
-export default SelectEntrantPage;
+export default ProtectedRoute(SelectEntrantPage, []);

@@ -3,15 +3,13 @@ import ProtectedRoute from "components/ProtectedRoute";
 import PageWrapper from "components/PageWrapper";
 
 const SubmissionConfirmationPage = () => {
-  return (
-    <PageWrapper>
-      <SubmissionConfirmation />
-    </PageWrapper>
-  );
+  return <SubmissionConfirmation />;
 };
 
 export default ProtectedRoute(SubmissionConfirmationPage, [
   "selectedEntrant",
+  "sets",
+  "filteredSets",
   "selectedSet",
   "gameData",
 ]);

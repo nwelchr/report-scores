@@ -4,12 +4,13 @@ import { useParams, useRouter } from "next/navigation";
 import OpponentSelection from "./OpponentSelection";
 import { useReportContext } from "context/ReportContext";
 import ProtectedRoute from "components/ProtectedRoute";
-import PageWrapper from "components/PageWrapper";
 
 const OpponentSelectionPage = () => {
   const { reportState, setReportState } = useReportContext();
   const router = useRouter();
   const { eventId } = useParams();
+
+  console.log({ reportState });
 
   const handleSetSelect = (set) => {
     setReportState((prevState) => ({ ...prevState, selectedSet: set }));
@@ -17,10 +18,12 @@ const OpponentSelectionPage = () => {
   };
 
   return (
-    <PageWrapper>
-      <OpponentSelection sets={reportState.sets} onSelect={handleSetSelect} />
-    </PageWrapper>
+    <OpponentSelection sets={reportState.sets} onSelect={handleSetSelect} />
   );
 };
 
-export default ProtectedRoute(OpponentSelectionPage, ["filteredSets"]);
+export default ProtectedRoute(OpponentSelectionPage, [
+  "selectedEntrant",
+  "sets",
+  "filteredSets",
+]);

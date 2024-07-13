@@ -13,6 +13,10 @@ const OpponentConfirmationPage = () => {
   const { eventId } = useParams();
 
   const handleYes = () => {
+    setReportState((prevState) => ({
+      ...prevState,
+      selectedSet: reportState.filteredSets[0],
+    }));
     router.push(`/events/${eventId}/report/best-of`);
   };
 
@@ -21,14 +25,16 @@ const OpponentConfirmationPage = () => {
   };
 
   return (
-    <PageWrapper>
-      <OpponentConfirmation
-        filteredSets={reportState.filteredSets}
-        onYes={handleYes}
-        onNo={handleNo}
-      />
-    </PageWrapper>
+    <OpponentConfirmation
+      filteredSets={reportState.filteredSets}
+      onYes={handleYes}
+      onNo={handleNo}
+    />
   );
 };
 
-export default ProtectedRoute(OpponentConfirmationPage, ["selectedEntrant"]);
+export default ProtectedRoute(OpponentConfirmationPage, [
+  "selectedEntrant",
+  "sets",
+  "filteredSets",
+]);

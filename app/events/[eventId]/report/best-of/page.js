@@ -14,16 +14,19 @@ const BestOfPage = () => {
   const handleSelect = (bestOf) => {
     setReportState((prevState) => ({
       ...prevState,
-      gameData: Array(bestOf).fill({ gameNum: 1 }),
+      gameData: Array.from({ length: bestOf }, (_, index) => ({
+        gameNum: index + 1,
+      })),
     }));
     router.push(`/events/${eventId}/report/score-input`);
   };
 
-  return (
-    <PageWrapper>
-      <BestOf onSelect={handleSelect} />
-    </PageWrapper>
-  );
+  return <BestOf onSelect={handleSelect} />;
 };
 
-export default ProtectedRoute(BestOfPage, ["selectedSet"]);
+export default ProtectedRoute(BestOfPage, [
+  "selectedEntrant",
+  "sets",
+  "filteredSets",
+  "selectedSet",
+]);

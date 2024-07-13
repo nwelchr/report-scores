@@ -5,8 +5,7 @@ import AutocompleteInput from "components/AutocompleteInput";
 export default function SelectEntrant({ entrants, onSelect }) {
   return (
     <>
-      <Title>Start.gg Tag</Title>
-      <Description>Please find your tag.</Description>
+      <Title>Enter your tag.</Title>
       <div className="mt-4 flex justify-center">
         <AutocompleteInput onSelect={onSelect} suggestions={entrants || []} />
       </div>

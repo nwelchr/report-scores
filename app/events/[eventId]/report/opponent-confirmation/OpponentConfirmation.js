@@ -2,21 +2,16 @@ import React from "react";
 import { Title, Description } from "components/Text";
 import Button from "components/Button";
 
-export default function OpponentConfirmation({ filteredSets, onSelect, onNo }) {
+export default function OpponentConfirmation({ filteredSets, onYes, onNo }) {
   return (
     <div className="w-full max-w-4xl text-center">
-      <Title>Confirm Opponent</Title>
-      <Description>
-        Is your opponent {filteredSets[0].opponent.name}?
-      </Description>
-      <div className="mt-4 flex justify-center space-x-4">
-        <Button onClick={() => onSelect(filteredSets[0])} color="teal">
-          Yes
-        </Button>
-        <Button onClick={onNo} color="fuchsia">
-          No
-        </Button>
-      </div>
+      <Title>Is your opponent {filteredSets[0].opponent.name}?</Title>
+      <Button isFullWidth onClick={onYes} color="indigo">
+        Yes
+      </Button>
+      <Button isFullWidth onClick={onNo} color="slate">
+        No
+      </Button>
     </div>
   );
 }

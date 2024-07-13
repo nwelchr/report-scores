@@ -10,7 +10,9 @@ const Loader = () => {
   }, []);
 
   return (
-    <l-waveform size="80" stroke="3" speed="1.5" color="white"></l-waveform>
+    <div className="flex items-center justify-center min-h-screen">
+      <l-waveform size="80" stroke="3" speed="1.5" color="white"></l-waveform>
+    </div>
   );
 };
 

@@ -24,11 +24,13 @@ const ScoreInputPage = () => {
     router.push(`/events/${eventId}/report/submission-confirmation`);
   };
 
-  return (
-    <PageWrapper>
-      <ScoreInput onSubmit={handleSubmit} />
-    </PageWrapper>
-  );
+  return <ScoreInput onSubmit={handleSubmit} />;
 };
 
-export default ProtectedRoute(ScoreInputPage, ["gameData"]);
+export default ProtectedRoute(ScoreInputPage, [
+  "selectedEntrant",
+  "sets",
+  "filteredSets",
+  "selectedSet",
+  "gameData",
+]);
