@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useParams, useRouter } from "next/navigation";
 import ScoreInput from "./ScoreInput";
 import { useReportContext } from "context/ReportContext";
 import ProtectedRoute from "components/ProtectedRoute";
@@ -7,7 +7,7 @@ import PageWrapper from "components/PageWrapper";
 const ScoreInputPage = () => {
   const { state, updateState } = useReportContext();
   const router = useRouter();
-  const { eventId } = router.query;
+  const { eventId } = useParams();
 
   const handleSubmit = (localGameData) => {
     const winnerId =

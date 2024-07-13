@@ -6,7 +6,6 @@ import { ReportProvider } from "context/ReportContext";
 
 export default function Providers({ children }) {
   const [queryClient] = useState(() => new QueryClient());
-  console.log("hello");
 
   return (
     <QueryClientProvider client={queryClient}>

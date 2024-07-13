@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/router";
+import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import SelectEntrant from "./SelectEntrant";
 import { useReportContext } from "context/ReportContext";
@@ -9,12 +9,13 @@ import PageWrapper from "components/PageWrapper";
 
 const SelectEntrantPage = () => {
   const { state, updateState } = useReportContext();
-  // const router = useRouter();
-  const { eventId } = router.query;
+  const router = useRouter();
+  const { eventId } = useParams();
 
-  const { data: entrants } = useQuery(["entrants", eventId], () =>
-    fetchEntrants(eventId)
-  );
+  const { data: entrants } = useQuery({
+    queryKey: ["entrants", eventId],
+    queryFn: () => fetchEntrants(eventId),
+  });
 
   const handleEntrantSelect = async (entrant) => {
     updateState({ selectedEntrant: entrant, value: entrant.name });

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from "react";
 
 const ReportContext = createContext();
 
-export const useReport = () => useContext(ReportContext);
+export const useReportContext = () => useContext(ReportContext);
 
 export const ReportProvider = ({ children }) => {
   const [reportState, setReportState] = useState({

@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useParams, useRouter } from "next/navigation";
 import OpponentSelection from "./OpponentSelection";
 import { useReportContext } from "context/ReportContext";
 import ProtectedRoute from "components/ProtectedRoute";
@@ -7,7 +7,7 @@ import PageWrapper from "components/PageWrapper";
 const OpponentSelectionPage = () => {
   const { state, updateState } = useReportContext();
   const router = useRouter();
-  const { eventId } = router.query;
+  const { eventId } = useParams();
 
   const handleSetSelect = (set) => {
     updateState({ selectedSet: set });

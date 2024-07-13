@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/router";
+import { useParams, useRouter } from "next/navigation";
 
 export default function ReportRedirectPage() {
   const router = useRouter();
-  const { eventId } = router.query;
+  console.log({ router });
+  const { eventId } = useParams();
 
   useEffect(() => {
     if (eventId) {

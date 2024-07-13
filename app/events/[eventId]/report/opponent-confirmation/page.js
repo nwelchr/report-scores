@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useParams, useRouter } from "next/navigation";
 import OpponentConfirmation from "./OpponentConfirmation";
 import { useReportContext } from "context/ReportContext";
 import ProtectedRoute from "components/ProtectedRoute";
@@ -7,7 +7,7 @@ import PageWrapper from "components/PageWrapper";
 const OpponentConfirmationPage = () => {
   const { state, updateState } = useReportContext();
   const router = useRouter();
-  const { eventId } = router.query;
+  const { eventId } = useParams();
 
   const handleYes = () => {
     router.push(`/events/${eventId}/report/best-of`);
