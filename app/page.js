@@ -24,8 +24,6 @@ export default function Page() {
   const [url, setUrl] = useState("");
   const router = useRouter();
 
-  console.log("hello?");
-
   const { data, error, isLoading, isSuccess } = useQuery({
     queryKey: ["event", { slug: extractSlug(url) }],
     queryFn: () => fetchEvent(extractSlug(url), router),
@@ -39,7 +37,7 @@ export default function Page() {
   }, [isSuccess, data, router]);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
+    <div className="min-h-screen text-white p-8">
       <h1 className="text-4xl mb-8">Fetch Event Data</h1>
       <form className="mb-8" onSubmit={(e) => e.preventDefault()}>
         <input

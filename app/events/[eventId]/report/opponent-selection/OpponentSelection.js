@@ -2,7 +2,7 @@ import React from "react";
 import { Title, Description } from "components/Text";
 import Button from "components/Button";
 
-export default function OpponentSelection({ sets, onSelect, onBack }) {
+export default function OpponentSelection({ sets, onSelect }) {
   const inProgressOrNotStarted =
     sets?.filter(
       (set) => set.state === "IN_PROGRESS" || set.state === "NOT_STARTED"
@@ -13,33 +13,27 @@ export default function OpponentSelection({ sets, onSelect, onBack }) {
     <>
       <Title>Select Opponent</Title>
       <Description>Select an opponent from the list below.</Description>
-      <div className="w-full flex-grow flex flex-col items-center space-y-4">
+      <div className="flex flex-col items-center">
         {inProgressOrNotStarted.map((set) => (
-          <Button
-            key={set.id}
-            onClick={() => onSelect(set)}
-            className="w-full max-w-sm py-2 px-4 text-xl text-white bg-gray-950 border border-gray-700 rounded-md cursor-pointer data-[hover]:bg-gray-800"
-          >
-            {set.opponent.name}
-          </Button>
+          <div key={set.id} className="w-full max-w-sm mb-4">
+            <Button isFullWidth onClick={() => onSelect(set)}>
+              {set.opponent.name}
+              <p className="text-sm text-slate-400 text-center mt-2">
+                Not reported
+              </p>
+            </Button>
+          </div>
         ))}
         {completed.map((set) => (
-          <Button
-            key={set.id}
-            onClick={() => onSelect(set)}
-            className="w-full max-w-sm py-2 px-4 text-xl text-white bg-gray-950 border border-gray-700 rounded-md cursor-pointer data-[hover]:bg-gray-800"
-          >
-            {set.opponent.name}: {set.entrantScore} - {set.opponentScore}
-          </Button>
+          <div key={set.id} className="w-full max-w-sm mb-4">
+            <Button isFullWidth onClick={() => onSelect(set)}>
+              {set.opponent.name}
+              <p className="text-sm text-slate-400 text-center mt-2">
+                {set.entrantScore} - {set.opponentScore}
+              </p>
+            </Button>
+          </div>
         ))}
-      </div>
-      <div className="flex justify-center mt-4">
-        <Button
-          onClick={onBack}
-          className="px-4 py-2 w-full max-w-sm text-lg border rounded-md bg-slate-950 border-slate-700 text-white data-[hover]:bg-slate-800 data-[active]:bg-slate-700"
-        >
-          Back
-        </Button>
       </div>
     </>
   );

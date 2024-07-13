@@ -61,7 +61,7 @@ export default function ScoreInput({
               disabled={
                 (index > 0 && !localGameData[index - 1].winnerId) || canSubmit
               }
-              color={game.winnerId === selectedEntrant.id ? "teal" : "gray"}
+              color={game.winnerId === selectedEntrant.id ? "teal" : "slate"}
             >
               Win
             </Button>
@@ -73,7 +73,7 @@ export default function ScoreInput({
                 (index > 0 && !localGameData[index - 1].winnerId) || canSubmit
               }
               color={
-                game.winnerId === selectedSet.opponent.id ? "fuchsia" : "gray"
+                game.winnerId === selectedSet.opponent.id ? "fuchsia" : "slate"
               }
             >
               Lose
@@ -91,7 +91,7 @@ export default function ScoreInput({
             Submit
           </Button>
         )}
-        <Button onClick={onBack} color="gray">
+        <Button onClick={onBack} color="slate">
           Back
         </Button>
       </div>

@@ -3,21 +3,14 @@
 import React from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-
-const fetchEntrantSets = async (eventId, entrantId) => {
-  const { data } = await axios.get(
-    `/api/events/${eventId}/entrants/${entrantId}/sets`
-  );
-  return data;
-};
+import { fetchSets } from "utils/api";
 
 const getOptions = (eventId, entrantId) => ({
   queryKey: [
     "entrantSets",
     { eventId: String(eventId), entrantId: String(entrantId) },
   ],
-  queryFn: () => fetchEntrantSets(eventId, entrantId),
+  queryFn: () => fetchSets(eventId, entrantId),
   enabled: !!eventId && !!entrantId,
 });
 
@@ -55,7 +48,7 @@ const getColorByPlacement = (placement) => {
   if (placement >= 9 && placement <= 16)
     return "bg-fuchsia-950 border-fuchsia-700";
   if (placement >= 17 && placement <= 32) return "bg-rose-950 border-rose-700";
-  return "bg-gray-950 border-gray-700";
+  return "bg-slate-950 border-slate-700";
 };
 
 export default Entrant;

@@ -25,8 +25,6 @@ const reportSet = async ({ setId, winnerId, gameData }) => {
     }
   );
 
-  console.log(JSON.stringify(response.data));
-
   return response.data.data;
 };
 

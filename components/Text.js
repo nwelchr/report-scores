@@ -5,5 +5,5 @@ export const Title = ({ children }) => (
 );
 
 export const Description = ({ children }) => (
-  <p className="mt-2 mb-4 text-gray-300">{children}</p>
+  <p className="mt-2 mb-4 text-slate-300">{children}</p>
 );

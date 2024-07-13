@@ -3,18 +3,11 @@
 import React from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import Entrant from "components/Entrant";
-
-const fetchEntrants = async (eventId) => {
-  const { data } = await axios.get(`/api/events/${eventId}/entrants`);
-  return data;
-};
+import { fetchEntrants } from "utils/api";
 
 export default function EventPage() {
   const { eventId } = useParams();
-
-  const router = useRouter();
 
   const {
     data: entrants,
@@ -27,7 +20,7 @@ export default function EventPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
+    <div className="min-h-screen text-white p-8">
       {isLoading && <p className="text-xl">Loading...</p>}
       {error && <p className="text-xl text-red-500">Error: {error.message}</p>}
       {entrants && (

@@ -7,11 +7,11 @@ const Header = () => {
   const canGoBack = pathname !== "/events/[eventId]/report/select-entrant";
 
   return (
-    <header className="w-full p-4 bg-gray-900 flex items-center">
+    <header className="absolute left-2 top-2 z-50 w-full p-4 flex items-center">
       {canGoBack && (
         <button
           onClick={() => router.back()}
-          className="text-white hover:text-gray-400"
+          className="text-white hover:text-slate-400"
         >
           <ArrowUturnLeftIcon className="w-8 h-8" />
         </button>

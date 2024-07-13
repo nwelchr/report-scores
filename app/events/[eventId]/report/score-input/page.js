@@ -5,20 +5,21 @@ import ProtectedRoute from "components/ProtectedRoute";
 import PageWrapper from "components/PageWrapper";
 
 const ScoreInputPage = () => {
-  const { state, updateState } = useReportContext();
+  const { reportState, setReportState } = useReportContext();
   const router = useRouter();
   const { eventId } = useParams();
 
   const handleSubmit = (localGameData) => {
     const winnerId =
-      localGameData.filter((game) => game.winnerId === state.selectedEntrant.id)
-        .length >
       localGameData.filter(
-        (game) => game.winnerId === state.selectedSet.opponent.id
+        (game) => game.winnerId === reportState.selectedEntrant.id
+      ).length >
+      localGameData.filter(
+        (game) => game.winnerId === reportState.selectedSet.opponent.id
       ).length
-        ? state.selectedEntrant.id
-        : state.selectedSet.opponent.id;
-    const setId = state.selectedSet.id;
+        ? reportState.selectedEntrant.id
+        : reportState.selectedSet.opponent.id;
+    const setId = reportState.selectedSet.id;
     reportSet({ eventId, setId, winnerId, gameData: localGameData });
     router.push(`/events/${eventId}/report/submission-confirmation`);
   };

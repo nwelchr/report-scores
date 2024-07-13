@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 
 export default function ReportRedirectPage() {
   const router = useRouter();
-  console.log({ router });
   const { eventId } = useParams();
 
   useEffect(() => {

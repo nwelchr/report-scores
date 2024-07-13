@@ -13,10 +13,10 @@ export default function BestOf({ onSelect }) {
       <Title>Best of?</Title>
       <Description>Please select the number of games.</Description>
       <div className="flex justify-center space-x-4">
-        <Button onClick={() => handleSelect(3)} color="gray">
+        <Button onClick={() => handleSelect(3)} color="slate">
           Best of 3
         </Button>
-        <Button onClick={() => handleSelect(5)} color="gray">
+        <Button onClick={() => handleSelect(5)} color="slate">
           Best of 5
         </Button>
       </div>

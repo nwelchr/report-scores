@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const AutocompleteInput = ({ value, onChange, onSelect, suggestions }) => {
+const AutocompleteInput = ({ onSelect, suggestions }) => {
   const [query, setQuery] = useState("");
 
   const filteredSuggestions = suggestions.filter((suggestion) =>
@@ -9,7 +9,6 @@ const AutocompleteInput = ({ value, onChange, onSelect, suggestions }) => {
 
   const handleChange = (event) => {
     setQuery(event.target.value);
-    onChange(event.target.value);
   };
 
   const handleSelect = (suggestion) => {
@@ -20,7 +19,7 @@ const AutocompleteInput = ({ value, onChange, onSelect, suggestions }) => {
   return (
     <div className="relative">
       <input
-        className="p-2 border rounded-md bg-gray-950 border-gray-700 text-white w-full mb-4 text-4xl text-center"
+        className="p-2 border rounded-md bg-slate-900 border-slate-700 text-white w-full mb-4 text-4xl text-center"
         value={query}
         onChange={handleChange}
       />
@@ -30,7 +29,7 @@ const AutocompleteInput = ({ value, onChange, onSelect, suggestions }) => {
             <li
               key={suggestion.id}
               onClick={() => handleSelect(suggestion)}
-              className="text-3xl cursor-pointer select-none p-2 rounded-md bg-gray-950 border border-gray-700 text-center text-white hover:bg-gray-900"
+              className="text-3xl cursor-pointer select-none p-2 rounded-md bg-slate-950 border border-slate-700 text-center text-white hover:bg-slate-900"
             >
               {suggestion.name}
             </li>
