@@ -12,26 +12,22 @@ export default function OpponentSelection({ sets, onSelect }) {
   return (
     <>
       <Title>Select your opponent.</Title>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col w-full justify-center items-center">
         {inProgressOrNotStarted.map((set) => (
-          <div key={set.id} className="w-full max-w-sm">
-            <Button isFullWidth onClick={() => onSelect(set)}>
-              {set.opponent.name}
-              <p className="text-sm text-slate-400 text-center mt-2">
-                Not reported
-              </p>
-            </Button>
-          </div>
+          <Button key={set.id} isFullWidth onClick={() => onSelect(set)}>
+            {set.opponent.name}
+            <p className="text-sm text-slate-400 text-center mt-2">
+              Not reported
+            </p>
+          </Button>
         ))}
         {completed.map((set) => (
-          <div key={set.id} className="w-full max-w-sm">
-            <Button isFullWidth onClick={() => onSelect(set)}>
-              {set.opponent.name}
-              <p className="text-sm text-slate-400 text-center mt-2">
-                {set.entrantScore} - {set.opponentScore}
-              </p>
-            </Button>
-          </div>
+          <Button key={set.id} isFullWidth onClick={() => onSelect(set)}>
+            {set.opponent.name}
+            <p className="text-sm text-slate-400 text-center mt-2">
+              {set.entrantScore} - {set.opponentScore}
+            </p>
+          </Button>
         ))}
       </div>
     </>

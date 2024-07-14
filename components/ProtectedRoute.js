@@ -1,7 +1,9 @@
-import { useRouter, useParams } from "next/navigation";
+"use client";
+
+import { useRouter, useParams, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useReportContext } from "context/ReportContext";
-import { useLoading } from "context/LoadingContext";
+import Loader from "components/Loader";
 
 const isStateValid = (reportState, requiredState) => {
   return requiredState.every((key) => {
@@ -15,25 +17,20 @@ const isStateValid = (reportState, requiredState) => {
 
 const ProtectedRoute = (WrappedComponent, requiredState) => {
   const ComponentWithProtection = (props) => {
-    const { reportState } = useReportContext();
-    const { isLoading, setIsLoading } = useLoading();
+    const { reportState, isLoading, setIsLoading } = useReportContext();
     const router = useRouter();
     const { eventId } = useParams();
 
     useEffect(() => {
-      console.log(router);
+      setIsLoading(true);
       if (!isStateValid(reportState, requiredState)) {
         router.push(`/events/${eventId}/report/select-entrant`);
       } else {
         setIsLoading(false);
       }
-    }, [reportState, router, eventId]);
+    }, [reportState, router, eventId, setIsLoading]);
 
-    if (!isStateValid(reportState, requiredState)) {
-      return null;
-    }
-
-    return <WrappedComponent {...props} />;
+    return isLoading ? <Loader /> : <WrappedComponent {...props} />;
   };
 
   ComponentWithProtection.displayName = `ProtectedRoute(${

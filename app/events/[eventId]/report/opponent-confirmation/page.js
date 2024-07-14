@@ -8,7 +8,6 @@ import PageWrapper from "components/PageWrapper";
 
 const OpponentConfirmationPage = () => {
   const { reportState, setReportState } = useReportContext();
-  console.log({ reportState });
   const router = useRouter();
   const { eventId } = useParams();
 

@@ -1,10 +1,9 @@
 "use client";
 
 import PageWrapper from "components/PageWrapper";
-import Loader from "components/Loader";
-import { useLoading } from "context/LoadingContext";
+import { useReportContext } from "context/ReportContext";
 
 export default function ReportLayout({ children }) {
-  const { isLoading } = useLoading();
-  return <PageWrapper>{children}</PageWrapper>;
+  const { isLoading } = useReportContext;
+  return <PageWrapper isLoading={isLoading}>{children}</PageWrapper>;
 }

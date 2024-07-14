@@ -10,8 +10,6 @@ const OpponentSelectionPage = () => {
   const router = useRouter();
   const { eventId } = useParams();
 
-  console.log({ reportState });
-
   const handleSetSelect = (set) => {
     setReportState((prevState) => ({ ...prevState, selectedSet: set }));
     router.push(`/events/${eventId}/report/best-of`);
@@ -25,5 +23,4 @@ const OpponentSelectionPage = () => {
 export default ProtectedRoute(OpponentSelectionPage, [
   "selectedEntrant",
   "sets",
-  "filteredSets",
 ]);

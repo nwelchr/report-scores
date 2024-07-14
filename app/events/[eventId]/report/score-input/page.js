@@ -1,7 +1,10 @@
+"use client";
+
 import { useParams, useRouter } from "next/navigation";
 import ScoreInput from "./ScoreInput";
 import { useReportContext } from "context/ReportContext";
 import ProtectedRoute from "components/ProtectedRoute";
+import { reportSet } from "utils/api";
 import PageWrapper from "components/PageWrapper";
 
 const ScoreInputPage = () => {
@@ -24,13 +27,19 @@ const ScoreInputPage = () => {
     router.push(`/events/${eventId}/report/submission-confirmation`);
   };
 
-  return <ScoreInput onSubmit={handleSubmit} />;
+  return (
+    <ScoreInput
+      selectedEntrant={reportState.selectedEntrant}
+      selectedSet={reportState.selectedSet}
+      gameData={reportState.gameData}
+      onSubmit={handleSubmit}
+    />
+  );
 };
 
 export default ProtectedRoute(ScoreInputPage, [
   "selectedEntrant",
   "sets",
-  "filteredSets",
   "selectedSet",
   "gameData",
 ]);

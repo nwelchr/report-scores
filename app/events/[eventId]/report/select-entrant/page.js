@@ -30,7 +30,6 @@ const SelectEntrantPage = () => {
     }));
 
     if (filteredSets.length === 1) {
-      console.log("push onto router");
       router.push(`/events/${eventId}/report/opponent-confirmation`);
     } else {
       router.push(`/events/${eventId}/report/opponent-selection`);

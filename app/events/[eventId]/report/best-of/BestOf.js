@@ -3,19 +3,14 @@ import { Title, Description } from "components/Text";
 import Button from "components/Button";
 
 export default function BestOf({ onSelect }) {
-  const handleSelect = (count) => {
-    const initialGameData = Array(count).fill({ gameNum: 1 });
-    onSelect(initialGameData);
-  };
-
   return (
     <>
-      <Title>Best of</Title>
-      <div className="flex justify-center space-x-4">
-        <Button onClick={() => handleSelect(3)} color="slate">
+      <Title>Best of?</Title>
+      <div className="flex flex-col justify-center">
+        <Button onClick={() => onSelect(3)} color="slate">
           3
         </Button>
-        <Button onClick={() => handleSelect(5)} color="slate">
+        <Button onClick={() => onSelect(5)} color="slate">
           5
         </Button>
       </div>

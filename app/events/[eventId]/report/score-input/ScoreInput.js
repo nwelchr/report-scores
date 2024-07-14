@@ -7,15 +7,8 @@ export default function ScoreInput({
   selectedSet,
   gameData,
   onSubmit,
-  onBack,
 }) {
-  const [localGameData, setLocalGameData] = useState([]);
-
-  useEffect(() => {
-    if (gameData.length > 0) {
-      setLocalGameData(gameData);
-    }
-  }, [gameData]);
+  const [localGameData, setLocalGameData] = useState(gameData);
 
   const gameCount = localGameData.length;
   const [entrantWins, setEntrantWins] = useState(0);
@@ -91,9 +84,6 @@ export default function ScoreInput({
             Submit
           </Button>
         )}
-        <Button onClick={onBack} color="slate">
-          Back
-        </Button>
       </div>
     </>
   );
