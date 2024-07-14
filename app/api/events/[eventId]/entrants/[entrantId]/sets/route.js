@@ -54,9 +54,11 @@ export async function GET(req, { params }) {
             winnerScore = "W";
             loserScore = "L";
           } else {
-            const [winnerPart, loserPart] = set.displayScore.split(" - ");
-            winnerScore = parseInt(winnerPart.split(" ").pop());
-            loserScore = parseInt(loserPart.split(" ").pop());
+            const scores = set.displayScore
+              .split(" - ")
+              .map((s) => s.split(" ")[1]);
+
+            [loserScore, winnerScore] = scores.map((s) => parseInt(s)).sort();
           }
         } else {
           winnerScore = null;

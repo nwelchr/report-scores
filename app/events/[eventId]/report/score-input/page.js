@@ -14,10 +14,10 @@ const ScoreInputPage = () => {
   const handleSubmit = (localGameData) => {
     const winnerId =
       localGameData.filter(
-        (game) => game.winnerId === reportState.selectedEntrant.id
+        (game) => game.winnerId === reportState.selectedEntrant.id,
       ).length >
       localGameData.filter(
-        (game) => game.winnerId === reportState.selectedSet.opponent.id
+        (game) => game.winnerId === reportState.selectedSet.opponent.id,
       ).length
         ? reportState.selectedEntrant.id
         : reportState.selectedSet.opponent.id;
