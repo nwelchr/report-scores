@@ -15,8 +15,8 @@ const Button = ({
     slate:
       "bg-slate-950 border-slate-700 hover:bg-slate-800 active:bg-slate-700",
     teal: "bg-teal-950 border-teal-700 hover:bg-teal-800 active:bg-teal-700",
-    violet:
-      "bg-violet-950 border-violet-700 hover:bg-violet-800 active:bg-violet-700",
+    indigo:
+      "bg-indigo-950 border-indigo-700 hover:bg-indigo-800 active:bg-indigo-700",
   };
 
   return (

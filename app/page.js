@@ -2,13 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-
-const fetchEvent = async (slug) => {
-  const { data } = await axios.get(`/api/events`, { params: { slug } });
-  return data;
-};
+import { fetchEvent } from "utils/api";
 
 const extractSlug = (input) => {
   // eslint-disable-next-line no-useless-escape

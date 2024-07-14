@@ -2,24 +2,17 @@
 
 import React from "react";
 import { useParams, useRouter } from "next/navigation";
-import axios from "axios";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchSets } from "utils/api";
 
 const getOptions = (eventId, entrantId) => ({
   queryKey: [
     "entrantSets",
     { eventId: String(eventId), entrantId: String(entrantId) },
   ],
-  queryFn: () => fetchEntrantSets(eventId, entrantId),
+  queryFn: () => fetchSets(eventId, entrantId),
   enabled: !!eventId && !!entrantId,
 });
-
-const fetchEntrantSets = async (eventId, entrantId) => {
-  const { data } = await axios.get(
-    `/api/events/${eventId}/entrants/${entrantId}/sets`,
-  );
-  return data;
-};
 
 export default function EntrantSetsPage() {
   const { eventId, entrantId } = useParams();
@@ -44,6 +37,8 @@ export default function EntrantSetsPage() {
   const handleClick = (opponentId) => {
     router.push(`/events/${eventId}/entrants/${opponentId}`);
   };
+
+  console.log({ data });
 
   return (
     <div className="min-h-screen bg-slate-950 text-white p-8 flex flex-col items-center">
