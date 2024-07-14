@@ -27,7 +27,6 @@ export async function GET(req, { params }) {
 
     const transformedSets = sets.entrant.paginatedSets.nodes
       .map((set) => {
-        console.log({ set });
         let winnerScore, loserScore;
         const slots = set.slots || [];
         const entrantSlot = slots.find(
@@ -48,18 +47,19 @@ export async function GET(req, { params }) {
           if (set.displayScore === "DQ") {
             winnerScore = "W";
             loserScore = "DQ";
-          } else if (
-            set.displayScore.includes("W") ||
-            set.displayScore.includes("L")
-          ) {
-            winnerScore = "W";
-            loserScore = "L";
           } else {
             const scores = set.displayScore
               .split(" - ")
               .map((s) => s.split(" ")[1]);
 
-            [loserScore, winnerScore] = scores.map((s) => parseInt(s)).sort();
+            console.log({ scores });
+
+            if (scores[0] === "W" || scores[0] === "L") {
+              loserScore = "L";
+              winnerScore = "W";
+            } else {
+              [loserScore, winnerScore] = scores.map((s) => parseInt(s)).sort();
+            }
           }
         } else {
           winnerScore = null;
