@@ -22,7 +22,7 @@ const reportSet = async ({ setId, winnerId, gameData }) => {
       headers: {
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_START_GG_API_TOKEN}`,
       },
-    }
+    },
   );
 
   return response.data.data;

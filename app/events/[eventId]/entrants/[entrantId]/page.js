@@ -16,7 +16,7 @@ const getOptions = (eventId, entrantId) => ({
 
 const fetchEntrantSets = async (eventId, entrantId) => {
   const { data } = await axios.get(
-    `/api/events/${eventId}/entrants/${entrantId}/sets`
+    `/api/events/${eventId}/entrants/${entrantId}/sets`,
   );
   return data;
 };
@@ -108,8 +108,8 @@ export default function EntrantSetsPage() {
                   {set.state === "COMPLETE"
                     ? `${entrantScore}-${opponentScore}`
                     : set.state === "IN_PROGRESS"
-                    ? "In Progress"
-                    : "Not Started"}
+                      ? "In Progress"
+                      : "Not Started"}
                 </p>
               </li>
             );

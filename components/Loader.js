@@ -1,6 +1,6 @@
 // components/Loader.js
 import React from "react";
-import { Puff, TailSpin } from "@agney/react-loading";
+import { TailSpin } from "@agney/react-loading";
 
 const Loader = () => {
   return (

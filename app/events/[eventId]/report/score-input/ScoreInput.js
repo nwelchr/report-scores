@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { Title, Description } from "components/Text";
 import Button from "components/Button";
 
@@ -18,7 +18,7 @@ export default function ScoreInput({
     () =>
       (gameCount === 3 && (entrantWins === 2 || opponentWins === 2)) ||
       (gameCount === 5 && (entrantWins === 3 || opponentWins === 3)),
-    [entrantWins, opponentWins, gameCount]
+    [entrantWins, opponentWins, gameCount],
   );
 
   const handleGameDataUpdate = (index, winnerId) => {
@@ -32,10 +32,10 @@ export default function ScoreInput({
     setLocalGameData(newGameData);
 
     const entrantWinCount = newGameData.filter(
-      (game) => game.winnerId === selectedEntrant.id
+      (game) => game.winnerId === selectedEntrant.id,
     ).length;
     const opponentWinCount = newGameData.filter(
-      (game) => game.winnerId === selectedSet.opponent.id
+      (game) => game.winnerId === selectedSet.opponent.id,
     ).length;
 
     setEntrantWins(entrantWinCount);

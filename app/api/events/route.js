@@ -17,7 +17,7 @@ export async function GET(req) {
     console.error(error);
     return new Response(
       JSON.stringify({ error: "Failed to fetch event data" }),
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

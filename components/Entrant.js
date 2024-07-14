@@ -26,7 +26,7 @@ const Entrant = ({ entrant }) => {
   return (
     <li
       className={`p-2 mb-2 rounded-md cursor-pointer border ${getColorByPlacement(
-        entrant.placement
+        entrant.placement,
       )}`}
       onClick={handleEntrantClick}
       onMouseEnter={() => {

@@ -9,7 +9,7 @@ export async function POST(req, { params }) {
       JSON.stringify({ error: "Missing required parameters" }),
       {
         status: 400,
-      }
+      },
     );
   }
 

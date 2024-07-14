@@ -4,10 +4,9 @@ import { useParams, useRouter } from "next/navigation";
 import BestOf from "./BestOf";
 import { useReportContext } from "context/ReportContext";
 import ProtectedRoute from "components/ProtectedRoute";
-import PageWrapper from "components/PageWrapper";
 
 const BestOfPage = () => {
-  const { reportState, setReportState } = useReportContext();
+  const { setReportState } = useReportContext();
   const router = useRouter();
   const { eventId } = useParams();
 
@@ -17,7 +16,7 @@ const BestOfPage = () => {
         ...prevState,
         gameData: Array(bestOf).fill({}),
       }),
-      () => router.push(`/events/${eventId}/report/score-input`)
+      () => router.push(`/events/${eventId}/report/score-input`),
     );
   };
 

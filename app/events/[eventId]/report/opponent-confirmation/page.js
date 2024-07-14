@@ -4,7 +4,6 @@ import { useParams, useRouter } from "next/navigation";
 import OpponentConfirmation from "./OpponentConfirmation";
 import { useReportContext } from "context/ReportContext";
 import ProtectedRoute from "components/ProtectedRoute";
-import PageWrapper from "components/PageWrapper";
 
 const OpponentConfirmationPage = () => {
   const { reportState, setReportState } = useReportContext();

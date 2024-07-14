@@ -4,7 +4,7 @@ const AutocompleteInput = ({ onSelect, suggestions }) => {
   const [query, setQuery] = useState("");
 
   const filteredSuggestions = suggestions.filter((suggestion) =>
-    suggestion.name.toLowerCase().includes(query.toLowerCase())
+    suggestion.name.toLowerCase().includes(query.toLowerCase()),
   );
 
   const handleChange = (event) => {

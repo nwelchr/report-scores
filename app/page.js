@@ -11,6 +11,7 @@ const fetchEvent = async (slug) => {
 };
 
 const extractSlug = (input) => {
+  // eslint-disable-next-line no-useless-escape
   const regex = /(tournament\/[^\/]+\/events?\/[^\/\s]+)/;
   const match = input.match(regex);
   if (match) {

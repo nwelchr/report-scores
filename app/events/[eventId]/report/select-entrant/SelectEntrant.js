@@ -1,5 +1,5 @@
 import React from "react";
-import { Title, Description } from "components/Text";
+import { Title } from "components/Text";
 import AutocompleteInput from "components/AutocompleteInput";
 
 export default function SelectEntrant({ entrants, onSelect }) {

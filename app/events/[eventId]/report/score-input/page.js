@@ -5,10 +5,9 @@ import ScoreInput from "./ScoreInput";
 import { useReportContext } from "context/ReportContext";
 import ProtectedRoute from "components/ProtectedRoute";
 import { reportSet } from "utils/api";
-import PageWrapper from "components/PageWrapper";
 
 const ScoreInputPage = () => {
-  const { reportState, setReportState } = useReportContext();
+  const { reportState } = useReportContext();
   const router = useRouter();
   const { eventId } = useParams();
 

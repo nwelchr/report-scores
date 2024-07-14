@@ -1,11 +1,11 @@
 import React from "react";
-import { Title, Description } from "components/Text";
+import { Title } from "components/Text";
 import Button from "components/Button";
 
 export default function OpponentSelection({ sets, onSelect }) {
   const inProgressOrNotStarted =
     sets?.filter(
-      (set) => set.state === "IN_PROGRESS" || set.state === "NOT_STARTED"
+      (set) => set.state === "IN_PROGRESS" || set.state === "NOT_STARTED",
     ) || [];
   const completed = sets?.filter((set) => set.state === "COMPLETE") || [];
 

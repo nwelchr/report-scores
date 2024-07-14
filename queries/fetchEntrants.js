@@ -36,7 +36,7 @@ const fetchEntrants = async (eventId, page = 1, perPage = 50) => {
         headers: {
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_START_GG_API_TOKEN}`,
         },
-      }
+      },
     );
 
     const standings = response.data.data.event.standings.nodes;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useParams, usePathname } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useEffect } from "react";
 import { useReportContext } from "context/ReportContext";
 import Loader from "components/Loader";

@@ -14,7 +14,7 @@ export async function GET(req, { params }) {
       JSON.stringify({ error: "Missing eventId or entrantId" }),
       {
         status: 400,
-      }
+      },
     );
   }
 
@@ -27,17 +27,17 @@ export async function GET(req, { params }) {
 
     const transformedSets = sets.entrant.paginatedSets.nodes
       .map((set) => {
-        let winnerScore, loserScore, winner, loser;
+        let winnerScore, loserScore;
         const slots = set.slots || [];
         const entrantSlot = slots.find(
-          (slot) => slot?.entrant?.id === parseInt(entrantId)
+          (slot) => slot?.entrant?.id === parseInt(entrantId),
         );
         const opponentSlot = slots.find(
-          (slot) => slot?.entrant?.id !== parseInt(entrantId)
+          (slot) => slot?.entrant?.id !== parseInt(entrantId),
         );
 
         if (!entrantSlot || !opponentSlot) {
-          return null; // or handle the missing slot case differently if needed
+          return null;
         }
 
         const isEntrantWinner = set.winnerId === parseInt(entrantId);
@@ -47,28 +47,20 @@ export async function GET(req, { params }) {
           if (set.displayScore === "DQ") {
             winnerScore = "W";
             loserScore = "DQ";
-            winner = isEntrantWinner ? sets.entrant.name : opponent.name;
-            loser = isEntrantWinner ? opponent.name : sets.entrant.name;
           } else if (
             set.displayScore.includes("W") ||
             set.displayScore.includes("L")
           ) {
             winnerScore = "W";
             loserScore = "L";
-            winner = isEntrantWinner ? sets.entrant.name : opponent.name;
-            loser = isEntrantWinner ? opponent.name : sets.entrant.name;
           } else {
             const [winnerPart, loserPart] = set.displayScore.split(" - ");
             winnerScore = parseInt(winnerPart.split(" ").pop());
-            winner = winnerPart.slice(0, winnerPart.lastIndexOf(" "));
             loserScore = parseInt(loserPart.split(" ").pop());
-            loser = loserPart.slice(0, loserPart.lastIndexOf(" "));
           }
         } else {
           winnerScore = null;
           loserScore = null;
-          winner = null;
-          loser = null;
         }
 
         const entrantScore = isEntrantWinner ? winnerScore : loserScore;
@@ -91,7 +83,7 @@ export async function GET(req, { params }) {
       .filter(Boolean);
 
     const entrantSlot = sets.entrant.paginatedSets.nodes[0].slots.find(
-      (slot) => slot?.entrant?.id === parseInt(entrantId)
+      (slot) => slot?.entrant?.id === parseInt(entrantId),
     );
 
     const responseData = {
@@ -112,7 +104,7 @@ export async function GET(req, { params }) {
     console.error(error);
     return new Response(
       JSON.stringify({ error: "Failed to fetch entrant sets" }),
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

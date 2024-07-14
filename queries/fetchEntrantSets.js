@@ -60,7 +60,7 @@ const fetchEntrantSets = async (eventId, entrantId) => {
       headers: {
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_START_GG_API_TOKEN}`,
       },
-    }
+    },
   );
 
   return response.data.data;
