@@ -14,7 +14,7 @@ export async function GET(req, { params }) {
       JSON.stringify({ error: "Missing eventId or entrantId" }),
       {
         status: 400,
-      }
+      },
     );
   }
 
@@ -30,10 +30,10 @@ export async function GET(req, { params }) {
         let winnerScore, loserScore;
         const slots = set.slots || [];
         const entrantSlot = slots.find(
-          (slot) => slot?.entrant?.id === parseInt(entrantId)
+          (slot) => slot?.entrant?.id === parseInt(entrantId),
         );
         const opponentSlot = slots.find(
-          (slot) => slot?.entrant?.id !== parseInt(entrantId)
+          (slot) => slot?.entrant?.id !== parseInt(entrantId),
         );
 
         if (!entrantSlot || !opponentSlot) {
@@ -87,7 +87,7 @@ export async function GET(req, { params }) {
       .filter(Boolean);
 
     const entrantSlot = sets.entrant.paginatedSets.nodes[0].slots.find(
-      (slot) => slot?.entrant?.id === parseInt(entrantId)
+      (slot) => slot?.entrant?.id === parseInt(entrantId),
     );
 
     const responseData = {
@@ -110,7 +110,7 @@ export async function GET(req, { params }) {
     console.error(error);
     return new Response(
       JSON.stringify({ error: "Failed to fetch entrant sets" }),
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

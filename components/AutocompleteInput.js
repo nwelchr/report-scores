@@ -3,9 +3,9 @@ import React, { useState } from "react";
 const AutocompleteInput = ({ onSelect, suggestions }) => {
   const [query, setQuery] = useState("");
 
-  const filteredSuggestions = suggestions.filter((suggestion) =>
-    suggestion.name.toLowerCase().includes(query.toLowerCase()),
-  );
+  const filteredSuggestions = suggestions.filter((suggestion) => {
+    return suggestion.name.toLowerCase().includes(query.toLowerCase());
+  });
 
   const handleChange = (event) => {
     setQuery(event.target.value);
@@ -26,6 +26,7 @@ const AutocompleteInput = ({ onSelect, suggestions }) => {
       {query && filteredSuggestions.length > 0 && (
         <ul className="absolute mt-1 w-full z-10 max-h-32 overflow-y-auto">
           {filteredSuggestions.map((suggestion) => (
+            // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
             <li
               key={suggestion.id}
               onClick={() => handleSelect(suggestion)}

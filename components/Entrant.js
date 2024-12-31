@@ -24,10 +24,9 @@ const Entrant = ({ entrant }) => {
   };
 
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
     <li
-      className={`p-2 mb-2 rounded-md cursor-pointer border ${getColorByPlacement(
-        entrant.placement,
-      )}`}
+      className={`p-2 mb-2 rounded-md cursor-pointer border ${getColorByPlacement(entrant.placement)}`}
       onClick={handleEntrantClick}
       onMouseEnter={() => {
         queryClient.prefetchQuery(getOptions(eventId, entrant.id));

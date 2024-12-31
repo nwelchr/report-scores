@@ -20,14 +20,14 @@ const fetchEvent = async (slug) => {
         headers: {
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_START_GG_API_TOKEN}`,
         },
-      }
+      },
     );
 
     return response.data.data.event;
   } catch (error) {
     console.error(
       "Error fetching event:",
-      error.response ? error.response.data : error.message
+      error.response ? error.response.data : error.message,
     );
     throw new Error("Failed to fetch event");
   }

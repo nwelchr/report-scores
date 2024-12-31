@@ -20,7 +20,7 @@ const SelectEntrantPage = () => {
   const handleEntrantSelect = async (entrant) => {
     const { sets } = await fetchSets(eventId, entrant.id);
     const filteredSets = sets.filter(
-      (set) => set.state === "IN_PROGRESS" || set.state === "NOT_STARTED"
+      (set) => set.state === "IN_PROGRESS" || set.state === "NOT_STARTED",
     );
     setReportState((prevState) => ({
       ...prevState,
